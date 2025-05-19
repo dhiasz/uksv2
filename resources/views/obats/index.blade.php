@@ -9,7 +9,7 @@
         <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
             <h1 class="text-2xl font-bold mb-6">Daftar Obat</h1>
 
-            <a href="{{ route('obats.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-4 inline-block">
+            <a href="{{ route('obats.create') }}"class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block"">
                 Tambah Obat
             </a>
 

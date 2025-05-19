@@ -17,7 +17,8 @@ class Stokobat extends Model
 
     public function obat()
     {
-    return $this->belongsTo(Obat::class, 'obat_id');
+        return $this->belongsTo(Obat::class);
     }
-
 }
+
+

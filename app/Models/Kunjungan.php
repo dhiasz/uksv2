@@ -21,14 +21,18 @@ class Kunjungan extends Model
     ];
 
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-
-    public function stokobat(): BelongsTo
+    public function stokobat()
     {
-        return $this->belongsTo(Stokobat::class);
+        return $this->belongsTo(Stokobat::class, 'sobat_id');
+    }
+    
+        public function obat()
+    {
+    return $this->belongsTo(Obat::class, 'obat_id');
     }
 }

@@ -11,27 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kunjungans', function (Blueprint $table) {
+        Schema::create('siswas', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('sobat_id')->unsigned()->nullable();
             $table->string('nama');
-            $table->string('kelas',10);
+            $table->string('kelas',20);
             $table->integer('umur');
-            $table->string('keluhan');
-            $table->char('tindakan',2);
+            $table->integer('tb'); 
+            $table->integer('bb'); 
+            $table->string('tensi')->nullable();
+            $table->char('goldar',2)->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('sobat_id')->references('id')->on('stokobats')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
-        Schema::dropIfExists('kunjunans');
+        Schema::dropIfExists('siswas');
     }
 };

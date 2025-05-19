@@ -22,8 +22,6 @@ class KunjunganSeeder extends Seeder
         'umur' => 15,
         'keluhan' => 'Sakit kepala',
         'tindakan' => 'Diberikan obat',
-        'created_at' => now(),
-        'updated_at' => now(),
     ],
     // bisa tambah data lain di array ini
 ]);

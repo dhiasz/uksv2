@@ -12,8 +12,7 @@ class KunjunganController extends Controller
     public function index()
     {
     
-        $kunjungans = Kunjungan::with(['user', 'stokobat'])->get();
-         $kunjungans = Kunjungan::with('stokobat.obat')->get();
+        $kunjungans = Kunjungan::with(['user', 'stokobat.obat'])->get();
         return view('kunjungans.index', compact('kunjungans'));
     }
 

@@ -27,6 +27,10 @@
                     <x-nav-link :href="route('stokobats.index')" :active="request()->routeIs('stokobats.index')">
                             {{ __('StokObat') }}
                     </x-nav-link>
+                    
+                     <x-nav-link :href="route('siswas.index')" :active="request()->routeIs('siswas.index')">
+                            {{ __('Siswa') }}
+                    </x-nav-link>
                 </div>
             </div>
 
