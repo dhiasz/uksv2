@@ -6,6 +6,10 @@ use App\Models\StokObat;
 use App\Models\Obat;
 use Illuminate\Http\Request;
 
+use App\Exports\StokobatExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use \Maatwebsite\Excel\Facades\Excel;
 class StokObatController extends Controller
 {
     // Menampilkan semua stok obat
@@ -67,4 +71,36 @@ public function update(Request $request, $id)
 
         return redirect()->route('stokobats.index')->with('success', 'Stok obat berhasil dihapus');
     }
+
+    public function export()
+    {
+        return Excel::download(new StokobatExport, 'stok_obat.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+
+        try {
+            Excel::import(new StoksbatImport, $request->file('file'));
+            return redirect()->route('stokobats.index')->with('success', 'Data stok obat berhasil diimpor.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $errors = $e->failures();
+            $errorMessage = collect($errors)->pluck('errors')->flatten()->implode(' ');
+            return redirect()->back()->with('error', 'Gagal impor! ' . $errorMessage);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal impor! Alasan: ' . $e->getMessage());
+        }
+    }
+
+    public function print()
+    {
+        $stokobats = Stokobat::with('obat')->get();
+        $pdf = Pdf::loadView('stokobats.print', compact('stokobats'));
+        return $pdf->download('stok_obat.pdf');
+    }
+
+
 }

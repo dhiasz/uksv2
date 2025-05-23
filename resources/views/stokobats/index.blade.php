@@ -12,6 +12,15 @@
                 <a href="{{ route('stokobats.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block">
                     Tambah Stok Obat
                 </a>
+                <a href="{{ route('stokobats.export') }}" 
+                       class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition">
+                        Export stok obat
+                    </a>
+                <a href="{{ route('stokobats.print') }}" 
+                       class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
+                        Print stok obat
+                </a>
+
 
                 @if(session('success'))
                     <div class="mb-4 p-4 text-green-800 bg-green-100 rounded-lg">

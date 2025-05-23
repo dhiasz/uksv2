@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('kelas',10);
             $table->integer('umur');
             $table->string('keluhan');
-            $table->char('tindakan',2);
+            $table->string('tindakan');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kunjunans');
+        Schema::dropIfExists('kunjungans');
     }
 };

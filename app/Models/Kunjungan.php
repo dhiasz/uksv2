@@ -30,9 +30,18 @@ class Kunjungan extends Model
     {
         return $this->belongsTo(Stokobat::class, 'sobat_id');
     }
+
+
     
         public function obat()
     {
     return $this->belongsTo(Obat::class, 'obat_id');
     }
+
+     // Relasi ke Rujukan
+    public function rujukans()
+    {
+        return $this->hasMany(Rujukan::class);
+    }
+    
 }

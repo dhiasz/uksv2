@@ -6,12 +6,16 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
-        <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
-            <h1 class="text-2xl font-bold mb-6">Daftar Siswa</h1>
+        <div class="bg-white dark:bg-gray-900 shadow-sm sm:rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-6 text-white">Daftar Siswa</h1>
 
-            <a href="{{ route('siswas.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block">
-                Tambah Siswa
-            </a>
+            <div class="flex justify-between items-center mb-4">
+                <a href="{{ route('siswas.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition">
+                    Tambah Siswa
+                </a>
+
+                <input type="text" placeholder="Search for items" class="px-4 py-2 rounded-md border bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
             @if(session('success'))
                 <div class="mb-4 p-4 text-green-800 bg-green-100 rounded-lg">
@@ -19,50 +23,55 @@
                 </div>
             @endif
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white dark:bg-gray-700 border rounded text-center">
-                    <thead>
-                        <tr class="bg-red-700 dark:bg-gray-600 text-white">
-                            <th class="px-4 py-2 border">No</th>
-                            <th class="px-4 py-2 border">Nama</th>
-                            <th class="px-4 py-2 border">Kelas</th>
-                            <th class="px-4 py-2 border">Umur</th>
-                            <th class="px-4 py-2 border">Tinggi Badan</th>
-                            <th class="px-4 py-2 border">Berat Badan</th>
-                            <th class="px-4 py-2 border">Tensi</th>
-                            <th class="px-4 py-2 border">Golongan Darah</th>
-                            <th class="px-4 py-2 border">User</th>
-                            <th class="px-4 py-2 border">Aksi</th>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="min-w-full text-left text-sm font-light text-white">
+                    <thead class="bg-gray-800 border-b border-gray-700 uppercase">
+                        <tr>
+                            <th class="px-6 py-3"><input type="checkbox" class="form-checkbox text-blue-500"></th>
+                            <th class="px-6 py-3">Nama</th>
+                            <th class="px-6 py-3">Kelas</th>
+                            <th class="px-6 py-3">Umur</th>
+                            <th class="px-6 py-3">Tinggi</th>
+                            <th class="px-6 py-3">Berat</th>
+                            <th class="px-6 py-3">Tensi</th>
+                            <th class="px-6 py-3">Gol. Darah</th>
+                            <th class="px-6 py-3">User</th>
+                            <th class="px-6 py-3">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-gray-200">
                         @forelse($siswas as $index => $siswa)
-                            <tr class="{{ $index % 2 === 0 ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-700' }}">
-                                <td class="px-4 py-2 border">{{ $index + 1 }}</td>
-                                <td class="px-4 py-2 border">{{ $siswa->nama }}</td>
-                                <td class="px-4 py-2 border">{{ $siswa->kelas }}</td>
-                                <td class="px-4 py-2 border">{{ $siswa->umur }}</td>
-                                <td class="px-4 py-2 border">{{ $siswa->tb }} cm</td>
-                                <td class="px-4 py-2 border">{{ $siswa->bb }} kg</td>
-                                <td class="px-4 py-2 border">{{ $siswa->tensi ?? '-' }}</td>
-                                <td class="px-4 py-2 border">{{ $siswa->goldar ?? '-' }}</td>
-                                <td class="px-4 py-2 border">{{ $siswa->user->username ?? '-' }}</td>
-                                <td class="px-4 py-2 border">
-                                    <a href="{{ route('siswas.edit', $siswa->id) }}" class="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm">Edit</a>
+                            <tr class="{{ $index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800' }} border-b border-gray-700">
+                                <td class="px-6 py-3"><input type="checkbox" class="form-checkbox text-blue-500"></td>
+                                <td class="px-6 py-3">{{ $siswa->nama }}</td>
+                                <td class="px-6 py-3">{{ $siswa->kelas }}</td>
+                                <td class="px-6 py-3">{{ $siswa->umur }}</td>
+                                <td class="px-6 py-3">{{ $siswa->tb }} cm</td>
+                                <td class="px-6 py-3">{{ $siswa->bb }} kg</td>
+                                <td class="px-6 py-3">{{ $siswa->tensi ?? '-' }}</td>
+                                <td class="px-6 py-3">{{ $siswa->goldar ?? '-' }}</td>
+                                <td class="px-6 py-3">{{ $siswa->user->username ?? '-' }}</td>
+                                <td class="px-6 py-3">
+                                    <a href="{{ route('siswas.edit', $siswa->id) }}" class="text-yellow-400 hover:underline text-sm mr-2">Edit</a>
                                     <form action="{{ route('siswas.destroy', $siswa->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus siswa ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">Hapus</button>
+                                        <button type="submit" class="text-blue-500 hover:underline text-sm">Delete</button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center p-4 text-gray-500 dark:text-gray-400">Belum ada data siswa.</td>
+                                <td colspan="10" class="text-center py-4 text-gray-400">Belum ada data siswa.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            {{-- Pagination jika diperlukan --}}
+            <div class="mt-4">
+                {{ $siswas->links() }}
             </div>
         </div>
     </div>

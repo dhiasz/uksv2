@@ -8,17 +8,19 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-    public function index()
-    {
-        $siswas = Siswa::with('user')->get();
-        return view('siswas.index', compact('siswas'));
+  public function index(Request $request)
+{
+    $query = Siswa::with('user');
+
+    if ($request->has('search')) {
+        $query->where('nama', 'like', '%' . $request->search . '%');
     }
 
-    public function create()
-    {
-        $users = User::all();
-        return view('siswas.create', compact('users'));
-    }
+    $siswas = $query->paginate(10)->withQueryString();
+
+    return view('siswas.index', compact('siswas'));
+}
+
 
     public function store(Request $request)
     {

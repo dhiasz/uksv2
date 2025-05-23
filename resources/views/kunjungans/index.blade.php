@@ -1,4 +1,5 @@
 <x-app-layout>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Data Kunjungan') }}
@@ -12,7 +13,14 @@
             <a href="{{ route('kunjungans.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block">
                 Tambah Kunjungan
             </a>
-
+             <a href="{{ route('kunjungans.export') }}" 
+                       class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition mb-4 inline-block ">
+                        Export kunjungan
+                    </a>
+            <a href="{{ route('kunjungans.print') }}" 
+                       class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition mb-4 inline-block ">
+                        Print Kunjungan
+            </a>
             @if(session('success'))
                 <div class="mb-4 p-4 text-green-800 bg-green-100 rounded-lg">
                     {{ session('success') }}
@@ -56,6 +64,10 @@
                                         @method('DELETE')
                                         <button type="submit" class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">Hapus</button>
                                     </form>
+                                    <a href="{{ route('rujukans.create', $kunjungan->id) }}" target="_blank" class="btn btn-sm btn-warning">
+                                        buat Rujukan
+                                    </a>
+
                                 </td>
                             </tr>
                         @empty
@@ -65,6 +77,42 @@
                         @endforelse
                     </tbody>
                 </table>
+
+
+            <canvas id="grafikKunjungan" width="600" height="300"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx = document.getElementById('grafikKunjungan').getContext('2d');
+                const grafikKunjungan = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {!! json_encode($statistik->keys()) !!}, // contoh: ["Mei 2025", "Juni 2025"]
+                        datasets: [{
+                            label: 'Jumlah Kunjungan per Bulan',
+                            data: {!! json_encode($statistik->values()) !!},
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+
+
+
+
+
+
             </div>
         </div>
     </div>

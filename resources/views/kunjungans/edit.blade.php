@@ -35,6 +35,19 @@
                 @error('tindakan')<div class="text-red-500 text-sm mt-1">{{ $message }}</div>@enderror
             </div>
 
+
+            <div class="mb-4">
+                <label for="sobat_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Obat</label>
+                <select name="sobat_id" id="sobat_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                    @foreach ($stokobats as $obat)
+                        <option value="{{ $obat->id }}" {{ old('sobat_id', $kunjungan->sobat_id) == $obat->id ? 'selected' : '' }}>
+                            {{ $obat->obat->nama_obat }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('sobat_id')<div class="text-red-500 text-sm mt-1">{{ $message }}</div>@enderror
+            </div>
+
             <div class="flex justify-end space-x-4">
                 <a href="{{ route('kunjungans.index') }}" class="px-4 py-2 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 transition">Kembali</a>
                 <button type="submit" class="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition">Update</button>
