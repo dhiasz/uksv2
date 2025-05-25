@@ -13,11 +13,24 @@ use \Maatwebsite\Excel\Facades\Excel;
 class StokObatController extends Controller
 {
     // Menampilkan semua stok obat
-    public function index()
-    {
-        $stokobats = StokObat::with('obat')->get();
-        return view('stokobats.index', compact('stokobats'));
-    }
+public function index()
+{
+    $stokobats = StokObat::with('obat')->get();
+
+    $stokobats->transform(function ($stokobat) {
+        $kadaluarsa = \Carbon\Carbon::parse($stokobat->kadaluarsa);
+        $sekarang = \Carbon\Carbon::now();
+        $selisihHari = $sekarang->diffInDays($kadaluarsa, false);
+
+        // Tambahkan properti virtual
+        $stokobat->hampir_kadaluarsa = $selisihHari <= 7 && $selisihHari >= 0;
+        $stokobat->sudah_kadaluarsa = $selisihHari < 0;
+
+        return $stokobat;
+    });
+
+    return view('stokobats.index', compact('stokobats'));
+}
 
     // Tampilkan form tambah stok obat
     public function create()

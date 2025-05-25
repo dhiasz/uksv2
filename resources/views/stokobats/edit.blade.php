@@ -25,16 +25,17 @@
             </div>
 
             <div class="mb-4">
+                <label for="tanggal" class="block font-medium text-gray-700">Tanggal Masuk</label>
+                <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal', \Carbon\Carbon::parse($stokobat->masuk)->format('Y-m-d')) }}" class="w-full border rounded px-3 py-2" required>
+                @error('tanggal') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="mb-4">
                 <label for="kadaluarsa" class="block font-medium text-gray-700">Tanggal Kadaluarsa</label>
                 <input type="date" name="kadaluarsa" id="kadaluarsa" value="{{ old('kadaluarsa', \Carbon\Carbon::parse($stokobat->kadaluarsa)->format('Y-m-d')) }}" class="w-full border rounded px-3 py-2" required>
                 @error('kadaluarsa') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
             </div>
 
-            <div class="mb-4">
-                <label for="tanggal" class="block font-medium text-gray-700">Tanggal Masuk</label>
-                <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal', \Carbon\Carbon::parse($stokobat->masuk)->format('Y-m-d')) }}" class="w-full border rounded px-3 py-2" required>
-                @error('tanggal') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
-            </div>
 
             <div class="flex justify-end gap-4">
                 <a href="{{ route('stokobats.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Kembali</a>

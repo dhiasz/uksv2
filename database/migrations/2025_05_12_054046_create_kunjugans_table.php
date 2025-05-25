@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('umur');
             $table->string('keluhan');
             $table->string('tindakan');
+            $table->datetime('tgl');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

@@ -60,9 +60,6 @@
                         </option>
                     @endforeach
                 </select>
-                @error('sobat_id')
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                @enderror
             </div>
 
             {{-- User ID (tersembunyi atau dari session) --}}

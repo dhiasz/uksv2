@@ -1,4 +1,31 @@
 <x-app-layout>
+            <style>
+    .edit-icon {
+        background-image: url('edit.png');
+        width: 19px;
+        height: 19px;
+        background-size: cover;
+        display: inline-block;
+        transition: background-image 0.3s ease;
+    }
+
+    .edit-icon:hover {
+        background-image: url('edit (1).png');
+    }
+
+    .edit-icon-sampah {
+        background-image: url('bin.png');
+        width: 19px;
+        height: 19px;
+        background-size: cover;
+        display: inline-block;
+        transition: background-image 0.3s ease;
+    }
+
+    .edit-icon-sampah:hover {
+        background-image: url('bin (1).png');
+    }
+</style>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Data Obat') }}
@@ -19,38 +46,41 @@
                 </div>
             @endif
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white dark:bg-gray-700 border rounded">
-                    <thead>
-                        <tr class="bg-red-700 dark:bg-gray-600 text-white">
-                            <th class="px-4 py-2 border">No</th>
-                            <th class="px-4 py-2 border">Nama Obat</th>
-                            <th class="px-4 py-2 border">Jenis Obat</th>
-                            <th class="px-4 py-2 border">Aksi</th>
+            <div class="overflow-x-auto rounded-lg">
+            <table class="min-w-full text-sm font-light text-white text-center">
+                <thead class="bg-green-800 border-b border-gray-700 uppercase">
+                    <tr>
+                        <th class="px-6 py-3">No</th>
+                        <th class="px-6 py-3">Nama Obat</th>
+                        <th class="px-6 py-3">Jenis Obat</th>
+                        <th class="px-6 py-3">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="text-white">
+                    @forelse($obats as $index => $obat)
+                        <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
+                            <td class="px-6 py-3 text-black">{{ $index + 1 }}</td>
+                            <td class="px-6 py-3 text-black">{{ $obat->nama_obat }}</td>
+                            <td class="px-6 py-3 text-black">{{ $obat->jenis_obat }}</td>
+                            <td class="px-6 py-3 text-black">
+                                <a href="{{ route('obats.edit', $obat->id) }}" class="edit-icon" title="Edit"></a>
+                                <form action="{{ route('obats.destroy', $obat->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="edit-icon-sampah" title="Hapus"></button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($obats as $index => $obat)
-                            <tr class="{{ $index % 2 === 0 ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-700' }}">
-                                <td class="px-4 py-2 border text-center">{{ $index + 1 }}</td>
-                                <td class="px-4 py-2 border">{{ $obat->nama_obat }}</td>
-                                <td class="px-4 py-2 border">{{ $obat->jenis_obat }}</td>
-                                <td class="px-4 py-2 border text-center">
-                                    <a href="{{ route('obats.edit', $obat->id) }}" class="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm">Edit</a>
-                                    <form action="{{ route('obats.destroy', $obat->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center p-4 text-gray-500 dark:text-gray-400">Belum ada data obat.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-gray-400">Belum ada data obat.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+                
             </div>
         </div>
     </div>

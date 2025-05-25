@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('obat_id')->unsigned();
             $table->integer('jumlah');
-            $table->dateTime('kadaluarsa');
             $table->dateTime('masuk');
+            $table->dateTime('kadaluarsa');
             $table->foreign('obat_id')->references('id')->on('obats')->onDelete('cascade')->onUpdate('cascade');
+            $table->timestamps();
         });
     }
 

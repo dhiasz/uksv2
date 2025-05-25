@@ -18,20 +18,32 @@ use Carbon\Carbon;
 
 class KunjunganController extends Controller
 {
-    public function index()
+  
+    public function index(Request $request)
     {
-    $kunjungans = Kunjungan::with(['stokobat.obat', 'user'])->get();
+        $today = Carbon::today();
 
-    // Mengelompokkan kunjungan berdasarkan bulan (misal: "Mei 2025")
-    $statistik = Kunjungan::select(
-            DB::raw("DATE_FORMAT(created_at, '%M %Y') as bulan"),
-            DB::raw("COUNT(*) as total")
-        )
-        ->groupBy('bulan')
-        ->orderByRaw("MIN(created_at)") // urutkan berdasarkan tanggal terkecil tiap bulan
-        ->pluck('total', 'bulan'); // hasil: ['Mei 2025' => 10, 'Juni 2025' => 5, ...]
+        // Cek apakah ingin melihat semua data
+        if ($request->query('semua') === 'true') {
+            $kunjungans = Kunjungan::with(['stokobat.obat', 'user'])
+                            ->orderBy('created_at', 'desc')
+                            ->paginate(10);
+        } else {
+            $kunjungans = Kunjungan::with(['stokobat.obat', 'user'])
+                            ->whereDate('created_at', $today)
+                            ->orderBy('created_at', 'desc')
+                            ->paginate(10);
+        }
 
-    return view('kunjungans.index', compact('kunjungans', 'statistik'));
+        $statistik = Kunjungan::select(
+                DB::raw("DATE_FORMAT(created_at, '%M %Y') as bulan"),
+                DB::raw("COUNT(*) as total")
+            )
+            ->groupBy('bulan')
+            ->orderByRaw("MIN(created_at)")
+            ->pluck('total', 'bulan');
+
+        return view('kunjungans.index', compact('kunjungans', 'statistik'));
     }
 
     
@@ -47,7 +59,7 @@ class KunjunganController extends Controller
 {
     $request->validate([
         'user_id' => 'required|exists:users,id',
-        'sobat_id' => 'required|exists:stokobats,id',
+        'sobat_id' => 'nullable|exists:stokobats,id',
         'nama' => 'required|string|max:255',
         'kelas' => 'required|string|max:10',
         'umur' => 'required|integer',
@@ -55,22 +67,23 @@ class KunjunganController extends Controller
         'tindakan' => 'required|string',
     ]);
 
-    // Ambil data stok obat
-    $stokobat = Stokobat::findOrFail($request->sobat_id);
+    // Jika ada sobat_id, kurangi stok
+    if ($request->sobat_id) {
+        $stokobat = Stokobat::findOrFail($request->sobat_id);
 
-    // Cek apakah stok cukup
-    if ($stokobat->jumlah <= 0) {
-        return back()->with('error', 'Stok obat tidak mencukupi');
+        if ($stokobat->jumlah <= 0) {
+            return back()->with('error', 'Stok obat tidak mencukupi');
+        }
+
+        $stokobat->decrement('jumlah');
     }
-
-    // Kurangi stok
-    $stokobat->decrement('jumlah');
 
     // Simpan data kunjungan
     Kunjungan::create($request->all());
 
-    return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil ditambahkan dan stok dikurangi');
+    return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil ditambahkan' . ($request->sobat_id ? ' dan stok dikurangi' : ''));
 }
+
 
 
     public function edit($id)
