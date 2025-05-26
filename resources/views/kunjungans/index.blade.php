@@ -37,32 +37,26 @@
         <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
             <h1 class="text-2xl font-bold mb-6">Daftar Kunjungan</h1>
 
-            <a href="{{ route('kunjungans.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block">
+           <div class="flex flex-wrap gap-2 mb-4">
+            <a href="{{ route('kunjungans.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition">
                 Tambah Kunjungan
             </a>
-             
-            <a href="{{ route('kunjungans.print') }}" 
-                       class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition mb-4 inline-block ">
-                        Print Kunjungan
+
+            <a href="{{ route('kunjungans.print') }}" class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
+                Print Kunjungan
             </a>
+
             @if(request()->query('semua') !== 'true')
-                        <a href="{{ route('kunjungans.index', ['semua' => 'true']) }}"
-                            class="px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition inline-block">
-                            Tampilkan Semua Kunjungan
-                        </a>
-                    @else
-                        <a href="{{ route('kunjungans.index') }}"
-                            class="px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition inline-block">
-                            Tampilkan Kunjungan Hari Ini
-                        </a>
-                    @endif
-                        
-            @if(session('success'))
-                <div class="mb-4 p-4 text-green-800 bg-green-100 rounded-lg">
-                    {{ session('success') }}
-                </div>
+                <a href="{{ route('kunjungans.index', ['semua' => 'true']) }}" class="px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                    Tampilkan Semua Kunjungan
+                </a>
+            @else
+                <a href="{{ route('kunjungans.index') }}" class="px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                    Tampilkan Kunjungan Hari Ini
+                </a>
             @endif
-                        
+        </div>
+             <div class="overflow-x-auto">
             <table class="min-w-full text-sm font-light text-white text-center">
                 <thead class="bg-green-800 border-b border-gray-700 uppercase">
                     <tr>
@@ -118,15 +112,19 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
             <div class="mt-4">
             {{ $kunjungans->links() }}
             </div>
 
-</div>
+            </div>
 
 
 
-            <canvas id="grafikKunjungan" width="600" height="300"></canvas>
+            <div class="mt-8">
+            <canvas id="grafikKunjungan" class="w-full h-64"></canvas>
+            </div>
+
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script>
                 const ctx = document.getElementById('grafikKunjungan').getContext('2d');

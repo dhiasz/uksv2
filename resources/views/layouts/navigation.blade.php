@@ -86,6 +86,21 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('kunjungans.index')" :active="request()->routeIs('kunjungans.index')">
+                            {{ __('Kunjungan') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('obats.index')" :active="request()->routeIs('obats.index')">
+                            {{ __('Obat') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('stokobats.index')" :active="request()->routeIs('stokobats.index')">
+                            {{ __('StokObat') }}
+            </x-responsive-nav-link>
+                    
+            <x-responsive-nav-link :href="route('siswas.index')" :active="request()->routeIs('siswas.index')">
+                            {{ __('Siswa') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
