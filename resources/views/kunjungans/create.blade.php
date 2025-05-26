@@ -52,7 +52,7 @@
             {{-- Pilih Obat --}}
             <div class="mb-4">
                 <label for="sobat_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Obat yang Digunakan</label>
-                <select name="sobat_id" id="sobat_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
+                <select name="sobat_id" id="sobat_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200">
                     <option value="">-- Pilih Obat --</option>
                     @foreach($stokobats as $stok)
                         <option value="{{ $stok->id }}" {{ old('sobat_id') == $stok->id ? 'selected' : '' }}>

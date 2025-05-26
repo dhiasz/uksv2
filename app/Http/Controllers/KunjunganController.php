@@ -98,7 +98,7 @@ class KunjunganController extends Controller
     {
     // Validasi input
     $request->validate([
-        'sobat_id' => 'required|exists:stokobats,id',
+        'sobat_id' => 'nullable|exists:stokobats,id',
         'nama' => 'required|string|max:255',
         'kelas' => 'required|string|max:10',
         'umur' => 'required|integer',

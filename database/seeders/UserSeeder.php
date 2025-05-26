@@ -27,6 +27,11 @@ class UserSeeder extends Seeder
             'username' => 'ketua',
             'password' => Hash::make('ketua'),
         ],
+        [
+            'username' => 'joko',
+            'password' => Hash::make('12345'),
+        ],
+
     ]);
 
     }

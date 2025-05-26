@@ -43,7 +43,7 @@
             </a>
 
             <a href="{{ route('kunjungans.print') }}" class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
-                Print Kunjungan
+                Laporan
             </a>
 
             @if(request()->query('semua') !== 'true')

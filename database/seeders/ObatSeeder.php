@@ -13,9 +13,18 @@ class ObatSeeder extends Seeder
     public function run(): void
     {
         Obat::insert([
+            [
             'nama_obat' => 'parahmen',
             'jenis_obat' => 'Parasetamol'
-        ]
-        );
+            ],
+            [
+            'nama_obat' => 'OhKasbon',
+            'jenis_obat' => 'Obat bebas'
+            ],
+            [
+            'nama_obat' => 'InzafNak',
+            'jenis_obat' => 'Obat bebas'
+            ],
+        ]);
     }
 }
