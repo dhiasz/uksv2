@@ -14,14 +14,25 @@ class SiswaSeeder extends Seeder
     public function run(): void
     {
         Siswa::insert([
-        'user_id'=> 1,
-        'nama'=> 'budi',
-        'kelas'=> '10A',
-        'umur'=> '16',
-        'tb'=> '160',
-        'bb'=> '50',
-        'tensi'=> '120/80 mmHg',
-        'goldar'=> 'AB',
+            [
+            'user_id'=> 1,
+            'nama'=> 'budi',
+            'nis' => '203331556',
+            'tgl' => '2007-08-15',
+            ],
+            [
+            'user_id'=> 2,
+            'nama'=> 'Rizky',
+            'nis' => '2032981554',
+            'tgl' => '2006-04-12',
+            ]
+            ,
+            [
+            'user_id'=> 1,
+            'nama'=> 'Susan',
+            'nis' => '2032981524',
+            'tgl' => '2010-04-12',
+            ]
         ]);
     }
 }

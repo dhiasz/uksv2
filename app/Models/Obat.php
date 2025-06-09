@@ -9,6 +9,9 @@ class Obat extends Model
     protected $fillable = [
         'nama_obat',
         'jenis_obat',
+        'satuan',
+        'kategori',
+        'dosis',
     ];
 
      public function stokobat(): BelongsTo

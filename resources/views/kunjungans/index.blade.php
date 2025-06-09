@@ -75,7 +75,7 @@
                 <tbody class="text-white">
                     @forelse($kunjungans as $index => $kunjungan)
                         <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
-                            <td class="px-6 py-3 text-black">{{ $kunjungan->nama }}</td>
+                            <td class="px-6 py-3 text-black">{{ $kunjungan->siswa->nama }}</td>
                             <td class="px-6 py-3 text-black">{{ $kunjungan->kelas }}</td>
                             <td class="px-6 py-3 text-black">{{ $kunjungan->umur }}</td>
                             <td class="px-6 py-3 text-black">{{ $kunjungan->keluhan }}</td>

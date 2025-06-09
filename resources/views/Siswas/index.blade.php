@@ -42,15 +42,6 @@
                     Tambah Siswa
                 </a>
 
-                <form method="GET" action="{{ route('siswas.index') }}" class="flex items-center">
-                    <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Cari berdasarkan nama"
-                        class="px-4 py-2 rounded-md border bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <button type="submit" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Cari
-                    </button>
-                </form>
-
             </div>
 
             @if(session('success'))
@@ -64,13 +55,9 @@
                     <thead class="bg-green-800 border-b border-gray-700 uppercase">
                         <tr>
                             <th class="px-6 py-3">Nama</th>
-                            <th class="px-6 py-3">Kelas</th>
-                            <th class="px-6 py-3">Umur</th>
-                            <th class="px-6 py-3">Tinggi</th>
-                            <th class="px-6 py-3">Berat</th>
-                            <th class="px-6 py-3">Tensi</th>
-                            <th class="px-6 py-3">Gol. Darah</th>
+                            <th class="px-6 py-3">NIS</th>
                             <th class="px-6 py-3">User</th>
+                            <th class="px-6 py-3">Tanggal Lahir</th>
                             <th class="px-6 py-3">Action</th>
                         </tr>
                     </thead>
@@ -78,13 +65,9 @@
                         @forelse($siswas as $index => $siswa)
                             <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
                                 <td class="px-6 py-3 text-black">{{ $siswa->nama }}</td>
-                                <td class="px-6 py-3 text-black">{{ $siswa->kelas }}</td>
-                                <td class="px-6 py-3 text-black">{{ $siswa->umur }}</td>
-                                <td class="px-6 py-3 text-black">{{ $siswa->tb }} cm</td>
-                                <td class="px-6 py-3 text-black">{{ $siswa->bb }} kg</td>
-                                <td class="px-6 py-3 text-black">{{ $siswa->tensi ?? '-' }}</td>
-                                <td class="px-6 py-3 text-black">{{ $siswa->goldar ?? '-' }}</td>
+                                <td class="px-6 py-3 text-black">{{ $siswa->nis }}</td>
                                 <td class="px-6 py-3 text-black">{{ $siswa->user->username ?? '-' }}</td>
+                                <td class="px-6 py-3 text-black">{{ $siswa->tgl}}</td>
                                 <td class="px-6 py-3 text-black">
                                     <a href="{{ route('siswas.edit', $siswa->id) }}" class="edit-icon"></a>
                                     <form action="{{ route('siswas.destroy', $siswa->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus siswa ini?')">

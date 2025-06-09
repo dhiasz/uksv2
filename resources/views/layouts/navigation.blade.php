@@ -31,6 +31,15 @@
                      <x-nav-link :href="route('siswas.index')" :active="request()->routeIs('siswas.index')">
                             {{ __('Siswa') }}
                     </x-nav-link>
+
+                     <x-nav-link :href="route('kesehatan.index')" :active="request()->routeIs('kesehatan.index')">
+                            {{ __('Kesehatan') }}
+                    </x-nav-link>
+                    
+                    <x-nav-link :href="route('alatmedis.index')" :active="request()->routeIs('alatmedis.index')">
+                            {{ __('Alatmedis') }}
+                    </x-nav-link>
+                    
                 </div>
             </div>
 
@@ -100,6 +109,14 @@
                     
             <x-responsive-nav-link :href="route('siswas.index')" :active="request()->routeIs('siswas.index')">
                             {{ __('Siswa') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('kesehatan.index')" :active="request()->routeIs('kesehatan.index')">
+                            {{ __('Kesehatan') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('alatmedis.index')" :active="request()->routeIs('alatmedis.index')">
+                            {{ __('Alatmedis') }}
             </x-responsive-nav-link>
         </div>
 

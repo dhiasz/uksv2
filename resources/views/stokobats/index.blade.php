@@ -39,10 +39,6 @@
                 <a href="{{ route('stokobats.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block">
                     Tambah Stok Obat
                 </a>
-                <a href="{{ route('stokobats.export') }}" 
-                       class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition">
-                        Export stok obat
-                    </a>
                 <a href="{{ route('stokobats.print') }}" 
                        class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
                         Print stok obat
@@ -62,6 +58,7 @@
                             <th class="px-6 py-3">No</th>
                             <th class="px-6 py-3">Nama Obat</th>
                             <th class="px-6 py-3">Jumlah</th>
+                            <th class="px-6 py-3">Dosis</th>
                             <th class="px-6 py-3">Tanggal Masuk</th>
                             <th class="px-6 py-3">Kadaluarsa</th>
                             <th class="px-6 py-3">Aksi</th>
@@ -72,7 +69,8 @@
                             <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
                                 <td class="px-6 py-3 text-black">{{ $index + 1 }}</td>
                                 <td class="px-6 py-3 text-black">{{ $stokobat->obat->nama_obat ?? '-' }}</td>
-                                <td class="px-6 py-3 text-black">{{ $stokobat->jumlah }}</td>
+                                <td class="px-6 py-3 text-black">{{ $stokobat->jumlah . ' ' .  $stokobat->obat->satuan }}</td>
+                                <td class="px-6 py-3 text-black">{{ $stokobat->obat->dosis }}</td>
                                 <td class="px-6 py-3 text-black">{{ \Carbon\Carbon::parse($stokobat->masuk)->format('d-m-Y') }}</td>
                                 <td class="px-6 py-3 {{ $stokobat->sudah_kadaluarsa || $stokobat->hampir_kadaluarsa ? 'text-red-600 font-semibold' : 'text-black' }}">
                                     {{ \Carbon\Carbon::parse($stokobat->kadaluarsa)->format('d-m-Y') }}

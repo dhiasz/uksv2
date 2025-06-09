@@ -31,13 +31,9 @@ class SiswaController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'nama' => 'required|string|max:255',
-            'kelas' => 'required|string|max:5',
-            'umur' => 'required|integer',
-            'tb' => 'required|integer',
-            'bb' => 'required|integer',
-            'tensi' => 'nullable|string',
-            'goldar' => 'nullable|string',
-        ]);
+            'nis' => 'required|digits_between:1,10|numeric',
+            'tgl' => 'required|date',
+                    ]);
 
         Siswa::create($request->all());
 
@@ -56,12 +52,8 @@ class SiswaController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'nama' => 'required|string|max:255',
-            'kelas' => 'required|string|max:20',
-            'umur' => 'required|integer',
-            'tb' => 'required|integer',
-            'bb' => 'required|integer',
-            'tensi' => 'nullable|string',
-            'goldar' => 'nullable|string|max:2',
+            'nis' => 'required|digits_between:1,10|numeric',
+            'tgl' => 'required|date',
         ]);
 
         $siswa = Siswa::findOrFail($id);
@@ -77,4 +69,6 @@ class SiswaController extends Controller
 
         return redirect()->route('siswas.index')->with('success', 'Data siswa berhasil dihapus');
     }
+
+    
 }

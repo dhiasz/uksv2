@@ -5,35 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Kunjungan;
 use App\Models\Stokobat;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Siswa;
 
+use Illuminate\Http\Request;
 use App\Exports\KunjunganExport;
 use App\Imports\KunjunganImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-
 class KunjunganController extends Controller
 {
-  
     public function index(Request $request)
     {
         $today = Carbon::today();
 
-        // Cek apakah ingin melihat semua data
-        if ($request->query('semua') === 'true') {
-            $kunjungans = Kunjungan::with(['stokobat.obat', 'user'])
-                            ->orderBy('created_at', 'desc')
-                            ->paginate(10);
-        } else {
-            $kunjungans = Kunjungan::with(['stokobat.obat', 'user'])
-                            ->whereDate('created_at', $today)
-                            ->orderBy('created_at', 'desc')
-                            ->paginate(10);
-        }
+        $kunjungans = Kunjungan::with(['stokobat.obat', 'user', 'siswa'])
+            ->when($request->query('semua') !== 'true', function ($query) use ($today) {
+                $query->whereDate('created_at', $today);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         $statistik = Kunjungan::select(
                 DB::raw("DATE_FORMAT(created_at, '%M %Y') as bulan"),
@@ -46,106 +39,85 @@ class KunjunganController extends Controller
         return view('kunjungans.index', compact('kunjungans', 'statistik'));
     }
 
-    
-
     public function create()
     {
         $users = User::all();
+        $siswas = Siswa::all();
         $stokobats = Stokobat::with('obat')->get();
-        return view('kunjungans.create', compact('users', 'stokobats'));
+        return view('kunjungans.create', compact('users', 'stokobats', 'siswas'));
     }
 
-   public function store(Request $request)
-{
-    $request->validate([
-        'user_id' => 'required|exists:users,id',
-        'sobat_id' => 'nullable|exists:stokobats,id',
-        'nama' => 'required|string|max:255',
-        'kelas' => 'required|string|max:10',
-        'umur' => 'required|integer',
-        'keluhan' => 'required|string',
-        'tindakan' => 'required|string',
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'siswa_id' => 'required|exists:siswas,id',
+            'sobat_id' => 'nullable|exists:stokobats,id',
+            'kelas' => 'required|string',
+            'umur' => 'required|integer',
+            'keluhan' => 'required|string',
+            'tindakan' => 'required|string',
+        ]);
 
-    // Jika ada sobat_id, kurangi stok
-    if ($request->sobat_id) {
-        $stokobat = Stokobat::findOrFail($request->sobat_id);
-
-        if ($stokobat->jumlah <= 0) {
-            return back()->with('error', 'Stok obat tidak mencukupi');
+        if ($request->sobat_id) {
+            $stokobat = Stokobat::findOrFail($request->sobat_id);
+            if ($stokobat->jumlah <= 0) {
+                return back()->with('error', 'Stok obat tidak mencukupi');
+            }
+            $stokobat->decrement('jumlah');
         }
 
-        $stokobat->decrement('jumlah');
+        Kunjungan::create($request->all());
+
+        return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil ditambahkan' . ($request->sobat_id ? ' dan stok dikurangi' : ''));
     }
-
-    // Simpan data kunjungan
-    Kunjungan::create($request->all());
-
-    return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil ditambahkan' . ($request->sobat_id ? ' dan stok dikurangi' : ''));
-}
-
-
 
     public function edit($id)
     {
         $kunjungan = Kunjungan::findOrFail($id);
         $users = User::all();
+        $siswas = Siswa::all();
         $stokobats = Stokobat::with('obat')->get();
-        return view('kunjungans.edit', compact('kunjungan', 'users', 'stokobats'));
+        return view('kunjungans.edit', compact('kunjungan', 'users', 'stokobats', 'siswas'));
     }
 
     public function update(Request $request, $id)
     {
-    // Validasi input
-    $request->validate([
-        'sobat_id' => 'nullable|exists:stokobats,id',
-        'nama' => 'required|string|max:255',
-        'kelas' => 'required|string|max:10',
-        'umur' => 'required|integer',
-        'keluhan' => 'required|string',
-        'tindakan' => 'required|string',
-    ]);
+        $request->validate([
+            'siswa_id' => 'required|exists:siswas,id',
+            'sobat_id' => 'nullable|exists:stokobats,id',
+            'kelas' => 'required|string',
+            'umur' => 'required|integer',
+            'keluhan' => 'required|string',
+            'tindakan' => 'required|string',
+        ]);
 
-    // Ambil data kunjungan yang akan diupdate
-    $kunjungan = Kunjungan::findOrFail($id);
-    $sobatLamaId = $kunjungan->sobat_id;
-    $sobatBaruId = $request->sobat_id;
+        $kunjungan = Kunjungan::findOrFail($id);
+        $sobatLamaId = $kunjungan->sobat_id;
+        $sobatBaruId = $request->sobat_id;
 
-    // Cek apakah sobat_id berubah
-    if ($sobatLamaId != $sobatBaruId) {
-        // Kembalikan stok obat lama
-        $stokLama = Stokobat::find($sobatLamaId);
-        if ($stokLama) {
-            $stokLama->increment('jumlah');
+        if ($sobatLamaId != $sobatBaruId) {
+            if ($sobatLamaId) {
+                $stokLama = Stokobat::find($sobatLamaId);
+                if ($stokLama) $stokLama->increment('jumlah');
+            }
+
+            if ($sobatBaruId) {
+                $stokBaru = Stokobat::findOrFail($sobatBaruId);
+                if ($stokBaru->jumlah <= 0) {
+                    return back()->with('error', 'Stok obat baru tidak mencukupi');
+                }
+                $stokBaru->decrement('jumlah');
+            }
         }
 
-        // Cek stok obat baru
-        $stokBaru = Stokobat::findOrFail($sobatBaruId);
-        if ($stokBaru->jumlah <= 0) {
-            return back()->with('error', 'Stok obat baru tidak mencukupi');
-        }
+        $data = $request->only(['siswa_id', 'sobat_id', 'kelas', 'umur', 'keluhan', 'tindakan']);
+        $data['user_id'] = auth()->id();
+        $kunjungan->update($data);
 
-        // Kurangi stok obat baru
-        $stokBaru->decrement('jumlah');
+        return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil diperbarui');
     }
 
-    // Siapkan data untuk update
-    $data = $request->only(['sobat_id', 'nama', 'kelas', 'umur', 'keluhan', 'tindakan']);
-    $data['user_id'] = auth()->id(); // Set user yang sedang login
-
-    // Update kunjungan
-    $kunjungan->update($data);
-
-    return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil diperbarui');
-    }
-
-
-
-
-
-    /**
-     * Hapus data kunjungan.
-     */
     public function destroy($id)
     {
         $kunjungan = Kunjungan::findOrFail($id);
@@ -153,7 +125,6 @@ class KunjunganController extends Controller
 
         return redirect()->route('kunjungans.index')->with('success', 'Data kunjungan berhasil dihapus');
     }
-
 
     public function export()
     {
@@ -170,17 +141,16 @@ class KunjunganController extends Controller
             Excel::import(new KunjunganImport, $request->file('file'));
             return redirect()->route('kunjungans.index')->with('success', 'Data kunjungan berhasil diimpor.');
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $errors = $e->failures();
-            $errorMessage = collect($errors)->pluck('errors')->flatten()->implode(' ');
-            return redirect()->back()->with('error', 'Gagal impor! ' . $errorMessage);
+            $errorMessage = collect($e->failures())->pluck('errors')->flatten()->implode(' ');
+            return back()->with('error', 'Gagal impor! ' . $errorMessage);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal impor! Alasan: ' . $e->getMessage());
+            return back()->with('error', 'Gagal impor! Alasan: ' . $e->getMessage());
         }
     }
 
     public function print()
     {
-        $kunjungans = Kunjungan::with(['user', 'stokobat.obat'])->get();
+        $kunjungans = Kunjungan::with(['user', 'stokobat.obat', 'siswa'])->get();
         $pdf = Pdf::loadView('kunjungans.print', compact('kunjungans'));
         return $pdf->download('kunjungan.pdf');
     }

@@ -53,6 +53,9 @@
                         <th class="px-6 py-3">No</th>
                         <th class="px-6 py-3">Nama Obat</th>
                         <th class="px-6 py-3">Jenis Obat</th>
+                        <th class="px-6 py-3">Satuan</th>
+                        <th class="px-6 py-3">kategori</th>
+                        <th class="px-6 py-3">dosis</th>
                         <th class="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
@@ -62,6 +65,9 @@
                             <td class="px-6 py-3 text-black">{{ $index + 1 }}</td>
                             <td class="px-6 py-3 text-black">{{ $obat->nama_obat }}</td>
                             <td class="px-6 py-3 text-black">{{ $obat->jenis_obat }}</td>
+                            <td class="px-6 py-3 text-black">{{ $obat->satuan }}</td>
+                            <td class="px-6 py-3 text-black">{{ $obat->kategori }}</td>
+                            <td class="px-6 py-3 text-black">{{ $obat->dosis }}</td>
                             <td class="px-6 py-3 text-black">
                                 <a href="{{ route('obats.edit', $obat->id) }}" class="edit-icon" title="Edit"></a>
                                 <form action="{{ route('obats.destroy', $obat->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">

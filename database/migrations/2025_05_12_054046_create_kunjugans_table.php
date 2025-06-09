@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('kunjungans', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('siswa_id')->unsigned();
             $table->bigInteger('sobat_id')->unsigned()->nullable();
-            $table->string('nama');
-            $table->string('kelas',10);
+            $table->string('kelas');
             $table->integer('umur');
             $table->string('keluhan');
             $table->string('tindakan');
@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('sobat_id')->references('id')->on('stokobats')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

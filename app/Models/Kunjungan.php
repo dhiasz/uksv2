@@ -12,15 +12,20 @@ class Kunjungan extends Model
     // Field yang boleh diisi mass assignment
     protected $fillable = [
         'user_id',
-        'sobat_id',
-        'nama',
+        'siswa_id',
         'kelas',
         'umur',
         'keluhan',
         'tindakan',
+        'sobat_id',
     ];
 
-
+    // Definisikan relasi ke model Siswa
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'siswa_id');
+    }
+    
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -41,7 +46,7 @@ class Kunjungan extends Model
      // Relasi ke Rujukan
     public function rujukans()
     {
-        return $this->hasMany(Rujukan::class);
+        return $this->belongsTo(Rujukan::class);
     }
-    
+
 }

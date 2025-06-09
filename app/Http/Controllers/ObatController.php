@@ -32,6 +32,9 @@ class ObatController extends Controller
         $request->validate([
             'nama_obat' => 'required|string|max:255',
             'jenis_obat' => 'required|string|max:255',
+            'satuan' => 'required|string|max:255',
+            'kategori' => 'required|string|max:255',
+            'dosis' => 'required|string|max:255',
         ]);
 
         Obat::create($request->all());
@@ -56,6 +59,9 @@ class ObatController extends Controller
         $request->validate([
             'nama_obat' => 'required|string|max:255',
             'jenis_obat' => 'required|string|max:255',
+            'satuan' => 'required|string|max:255',
+            'kategori' => 'required|string|max:255',
+            'dosis' => 'required|string|max:255',
         ]);
 
         $obat = Obat::findOrFail($id);

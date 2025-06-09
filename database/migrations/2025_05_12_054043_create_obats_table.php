@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nama_obat');
             $table->string('jenis_obat');
+            $table->string('satuan');
+            $table->string('kategori');
+            $table->string('dosis');
             $table->timestamps();
         });
     }

@@ -3,9 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KunjunganController;
+use App\Http\Controllers\KesehatanController;
+use App\Http\Controllers\KesehatanHistorisController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\StokObatController;
 use App\Http\Controllers\RujukanController;
+use App\Http\Controllers\AlatMedisController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
@@ -36,7 +39,12 @@ Route::middleware('auth')->group(function () {
 
     //======================================================================================================
 
+ //Kesehatan
+    //======================================================================================================
+    Route::resource('kesehatan', KesehatanController::class)->except(['show']);
+    Route::get('kesehatan/{kesehatan_id}/historis', [KesehatanHistorisController::class, 'index'])->name('kesehatan_historis.index');
 
+    //======================================================================================================
 
 
 
@@ -49,6 +57,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('siswas', \App\Http\Controllers\SiswaController::class);
+
+    Route::resource('alatmedis', AlatMedisController::class)->except(['show']);
 
 });
 
