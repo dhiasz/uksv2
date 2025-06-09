@@ -4,19 +4,21 @@
         <form action="{{ route('kesehatan.store') }}" method="POST">
             @csrf
 
-            {{-- Nama Siswa dengan Autocomplete --}}
+             {{-- Pilih Siswa --}}
             <div class="mb-4">
-                <label for="siswa_nama" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
-                <input type="text" id="siswa_nama" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" autocomplete="off" required>
-
-                {{-- Hidden input untuk ID siswa yang dipilih --}}
-                <input type="hidden" name="siswa_id" id="siswa_id" value="{{ old('siswa_id') }}">
-
+                <label for="siswa_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
+                <select name="siswa_id" id="siswa_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
+                    <option value="" disabled selected>-- Pilih Siswa --</option>
+                    @foreach($siswas as $siswa)
+                        <option value="{{ $siswa->id }}" data-tgl="{{ $siswa->tgl }}" data-nis="{{ $siswa->nis }}" {{ old('siswa_id') == $siswa->id ? 'selected' : '' }}>
+                            {{ $siswa->nama }}
+                        </option>
+                    @endforeach
+                </select>
                 @error('siswa_id')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
             </div>
-
 
             {{-- NIS (otomatis terisi) --}}
             <div class="mb-4">
@@ -84,69 +86,46 @@
             </div>
         </form>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const siswaSelect = document.getElementById('siswa_id');
-                const nisDisplay = document.getElementById('nis_display');
-                const umurInput = document.getElementById('umur');
+       <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const siswaSelect = document.getElementById('siswa_id');
+        const nisDisplay = document.getElementById('nis_display');
+        const umurInput = document.getElementById('umur');
 
-            $(document).ready(function() {
-            $('#siswa_nama').autocomplete({
-                source: function(request, response) {
-                    $.getJSON('{{ route('siswas.search') }}', {
-                        q: request.term
-                    }, function(data) {
-                        response(data);
-                    });
-                },
-                minLength: 2,
-                select: function(event, ui) {
-                    $('#siswa_id').val(ui.item.id); // set ID ke input hidden
-                    $('#nis_display').val(ui.item.nis); // set NIS
-                    $('#umur').val(hitungUmur(ui.item.tgl)); // set umur
-                }
-            });
+        function hitungUmur(tglLahir) {
+            if (!tglLahir) return '';
+            const today = new Date();
+            const lahir = new Date(tglLahir);
+            let umur = today.getFullYear() - lahir.getFullYear();
+            const m = today.getMonth() - lahir.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) umur--;
+            return umur;
+        }
 
-            function hitungUmur(tglLahir) {
-                const today = new Date();
-                const lahir = new Date(tglLahir);
-                let umur = today.getFullYear() - lahir.getFullYear();
-                const m = today.getMonth() - lahir.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) umur--;
-                return umur;
-                }
-            });
+        function updateFields() {
+            const selected = siswaSelect.options[siswaSelect.selectedIndex];
+            if (!selected) return;
+            const nis = selected.getAttribute('data-nis') || '';
+            const tgl = selected.getAttribute('data-tgl') || '';
 
-            function updateFields() {
-                const selected = siswaSelect.options[siswaSelect.selectedIndex];
-                if (!selected) return;
-                const nis = selected.getAttribute('data-nis') || '';
-                const tgl = selected.getAttribute('data-tgl') || '';
+            nisDisplay.value = nis;
+            umurInput.value = hitungUmur(tgl);
+        }
 
-                nisDisplay.value = nis;
-                umurInput.value = hitungUmur(tgl);
+         // Validasi input Tensi agar tidak mengandung karakter minus '-'
+        document.getElementById('tensi').addEventListener('input', function(e) {
+            if (this.value.includes('-')) {
+                this.value = this.value.replace(/-/g, '');
             }
-
-            // Validasi input Tensi agar tidak mengandung karakter minus '-'
-            document.getElementById('tensi').addEventListener('input', function(e) {
-                if (this.value.includes('-')) {
-                    this.value = this.value.replace(/-/g, '');
-                }
-            });
-
-            // Panggil sekali saat load
-            updateFields();
-
-            // Tambahkan event listener untuk update saat pilihan berubah
-            siswaSelect.addEventListener('change', updateFields);
         });
-        </script>
 
-        <!-- jQuery and jQuery UI (CDN) -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        // Panggil sekali saat load
+        updateFields();
 
+        // Tambahkan event listener untuk update saat pilihan berubah
+        siswaSelect.addEventListener('change', updateFields);
+    });
+</script>
 
     </div>
 </x-app-layout>
