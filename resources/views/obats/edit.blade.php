@@ -20,7 +20,8 @@
                     <option value="Obat Bebas" {{ old('golongan_obat', $obat->golongan_obat) == 'Obat Bebas' ? 'selected' : '' }}>Obat Bebas</option>
                     <option value="Obat Bebas Terbatas" {{ old('golongan_obat', $obat->golongan_obat) == 'Obat Bebas Terbatas' ? 'selected' : '' }}>Obat Bebas Terbatas</option>
                     <option value="Obat Keras" {{ old('golongan_obat', $obat->golongan_obat) == 'Obat Keras' ? 'selected' : '' }}>Obat Keras</option>
-                    <option value="Obat Keras" {{ old('golongan_obat', $obat->golongan_obat) == 'Obat Herbal Terstandar' ? 'selected' : '' }}>Obat Herbal Terstandar</option>
+                    <option value="Obat Herbal Terstandar" {{ old('golongan_obat', $obat->golongan_obat) == 'Obat Herbal Terstandar' ? 'selected' : '' }}>Obat Herbal Terstandar</option>
+
                 </select>
                 @error('golongan_obat')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -58,8 +59,8 @@
             <div class="mb-4">
                 <label for="satuan" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Satuan</label>
                 <select name="satuan" id="satuan" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
-                    <option value="mg" {{ old('satuan') == 'Pcs' ? 'selected' : '' }}>mg</option>
-                    <option value="ml" {{ old('satuan') == 'Botol' ? 'selected' : '' }}>ml</option>
+                    <option value="pcs" {{ old('satuan', $obat->satuan) == 'pcs' ? 'selected' : '' }}>pcs</option>
+                    <option value="botol" {{ old('satuan', $obat->satuan) == 'botol' ? 'selected' : '' }}>Botol</option>
                 </select>
                 @error('satuan')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -68,7 +69,7 @@
 
             <div class="mb-4">
                 <label for="dosis" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Dosis</label>
-                <input type="text" name="dosis" id="dosis" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('dosis', $obat->dosis) }}" required>
+                <input type="text" name="dosis" id="dosis" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('dosis', $obat->dosis) }}">
                 @error('dosis')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror

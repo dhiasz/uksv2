@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('kategori');
             $table->string('sediaan');
             $table->string('satuan');
-            $table->string('dosis');
+            $table->string('dosis')->nullable();
             $table->timestamps();
         });
     }
