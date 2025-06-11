@@ -1,21 +1,27 @@
 <x-app-layout>
     <div class="max-w-4xl mx-auto mt-10 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">Tambah Kunjungan</h1>
+        
+        {{-- Flash Message --}}
+        @if (session('success'))
+            <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
 
-        <form action="{{ route('kunjungans.store') }}" method="POST">
-            @csrf
+        @if (session('error'))
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                {{ session('error') }}
+            </div>
+        @endif
+                <form action="{{ route('kunjungans.store') }}" method="POST">
+                    @csrf
 
-            {{-- Pilih Siswa --}}
+            {{-- Nama Siswa dengan Autocomplete --}}
             <div class="mb-4">
-                <label for="siswa_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
-                <select name="siswa_id" id="siswa_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
-                    <option value="" disabled selected>-- Pilih Siswa --</option>
-                    @foreach($siswas as $siswa)
-                        <option value="{{ $siswa->id }}" data-tgl="{{ $siswa->tgl }}" data-nis="{{ $siswa->nis }}" {{ old('siswa_id') == $siswa->id ? 'selected' : '' }}>
-                            {{ $siswa->nama }}
-                        </option>
-                    @endforeach
-                </select>
+                <label for="nama_siswa" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
+                <input type="text" id="nama_siswa" name="nama_siswa" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" autocomplete="off" required>
+                <input type="hidden" name="siswa_id" id="siswa_id"> {{-- Hidden ID hasil dari autocomplete --}}
                 @error('siswa_id')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
@@ -94,6 +100,19 @@
                 @enderror
             </div>
 
+             {{-- Pilih Obat --}}
+            <div class="mb-4">
+                <label for="sobat_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Obat yang Digunakan</label>
+                <select name="sobat_id" id="sobat_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" >
+                    <option value="">-- Pilih Obat --</option>
+                    @foreach($stokobats as $stok)
+                        <option value="{{ $stok->id }}">
+                            {{ $stok->obat->nama_obat }} (Total Stok: {{ $stok->total_jumlah  }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             {{-- User ID --}}
             <input type="hidden" name="user_id" value="{{ auth()->id() }}">
 
@@ -105,6 +124,11 @@
             </div>
         </form>
     </div>
+
+      {{-- jQuery dan jQuery UI --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -125,6 +149,17 @@
                 if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) umur--;
                 return umur;
             }
+
+             // Autocomplete Nama Siswa
+            $("#nama_siswa").autocomplete({
+                source: "{{ route('siswa.autocomplete') }}",
+                minLength: 2,
+                select: function (event, ui) {
+                    $('#siswa_id').val(ui.item.id); // Hidden input
+                    $('#nis_display').val(ui.item.nis);
+                    $('#umur').val(hitungUmur(ui.item.tgl));
+                }
+            });
 
             function updateFields() {
                 const selected = siswaSelect.options[siswaSelect.selectedIndex];
@@ -154,3 +189,9 @@
         });
     </script>
 </x-app-layout>
+
+
+
+
+
+

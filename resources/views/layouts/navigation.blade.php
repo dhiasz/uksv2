@@ -36,8 +36,12 @@
                             {{ __('Kesehatan') }}
                     </x-nav-link>
                     
-                    <x-nav-link :href="route('alatmedis.index')" :active="request()->routeIs('alatmedis.index')">
-                            {{ __('Alatmedis') }}
+                    <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.index')">
+                        {{ __('Laporan') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('pengadaan.index')" :active="request()->routeIs('pengadaan.index')">
+                        {{ __('Pengadaan') }}
                     </x-nav-link>
                     
                 </div>

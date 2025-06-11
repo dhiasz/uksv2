@@ -41,17 +41,36 @@ public function index()
 
     // Simpan stok obat baru
     public function store(Request $request)
-    {
-        $request->validate([
-            'obat_id' => 'required|exists:obats,id',
-            'jumlah' => 'required|integer|min:1',
-            'kadaluarsa' => 'required|date',
-        ]);
+{
+    $request->validate([
+        'obat_id' => 'required|exists:obats,id',
+        'jumlah' => 'required|integer|min:1',
+        'kadaluarsa' => 'required|date',
+    ]);
 
+    // Ambil tanggal sekarang sebagai tanggal masuk (bisa diganti jika punya kolom tanggal_masuk sendiri)
+    $today = now()->startOfDay();
+
+    // Cek apakah stok dengan kombinasi yang sama sudah ada
+    $existing = StokObat::where('obat_id', $request->obat_id)
+        ->whereDate('created_at', $today)
+        ->whereDate('kadaluarsa', $request->kadaluarsa)
+        ->first();
+
+    if ($existing) {
+        // Jika ada, tambahkan jumlah
+        $existing->jumlah += $request->jumlah;
+        $existing->save();
+
+        return redirect()->route('stokobats.index')->with('success', 'Stok obat berhasil diperbarui.');
+    } else {
+        // Jika tidak, buat stok baru
         StokObat::create($request->all());
 
-        return redirect()->route('stokobats.index')->with('success', 'Stok obat berhasil ditambahkan');
+        return redirect()->route('stokobats.index')->with('success', 'Stok obat berhasil ditambahkan.');
     }
+}
+
 
 
     public function edit($id)

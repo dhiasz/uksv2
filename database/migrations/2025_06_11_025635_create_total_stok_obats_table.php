@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('obats', function (Blueprint $table) {
+        Schema::create('total_stok_obats', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_obat')->unique();
-            $table->string('golongan_obat');
-            $table->string('kategori');
-            $table->string('sediaan');
-            $table->string('satuan');
-            $table->string('dosis');
+            $table->unsignedBigInteger('obat_id');
+            $table->integer('total_jumlah')->default(0);
             $table->timestamps();
+
+            $table->foreign('obat_id')->references('id')->on('obats')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('obats');
+        Schema::dropIfExists('total_stok_obats');
     }
 };

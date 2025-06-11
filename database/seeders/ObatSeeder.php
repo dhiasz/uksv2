@@ -13,34 +13,45 @@ class ObatSeeder extends Seeder
     public function run(): void
     {
         Obat::insert([
-           [
+            [
                 'nama_obat' => 'Paracetamol',
-                'jenis_obat' => 'Tablet',
+                'golongan_obat' => 'Obat Bebas',
+                'kategori' => 'Antipiretik',
+                'sediaan' => 'Tablet',
                 'satuan' => 'pcs',
-                'kategori' => 'Analgesik',
                 'dosis' => '500 mg',
             ],
             [
                 'nama_obat' => 'Amoxicillin',
-                'jenis_obat' => 'Kapsul',
-                'satuan' => 'pcs',
+                'golongan_obat' => 'Obat Keras',
                 'kategori' => 'Antibiotik',
-                'dosis' => '250 mg',
+                'sediaan' => 'Kapsul',
+                'satuan' => 'pcs',
+                'dosis' => '500 mg',
             ],
             [
-                'nama_obat' => 'Minyak Kayu Putih',
-                'jenis_obat' => 'Cair',
-                'satuan' => 'Botol',
-                'kategori' => 'Obat luar',
-                'dosis' => '60 mL',
-            ],
-
-            [
-                'nama_obat' => 'Sirup Paracetamol',
-                'jenis_obat' => 'Cair',
-                'satuan' => 'Botol',
+                'nama_obat' => 'Ibuprofen',
+                'golongan_obat' => 'Obat Bebas Terbatas',
                 'kategori' => 'Analgesik',
-                'dosis' => '120 mg/5 mL',
+                'sediaan' => 'Tablet',
+                'satuan' => 'pcs',
+                'dosis' => '400 mg 2x sehari',
+            ],
+            [
+                'nama_obat' => 'Vitamin C',
+                'golongan_obat' => 'Obat Bebas',
+                'kategori' => 'Vitamin',
+                'sediaan' => 'Tablet',
+                'satuan' => 'pcs',
+                'dosis' => '500 mg',
+            ],
+            [
+                'nama_obat' => 'Salep Miconazole',
+                'golongan_obat' => 'Obat Keras',
+                'kategori' => 'Antibiotik',
+                'sediaan' => 'Salep',
+                'satuan' => 'gram',
+                'dosis' => '2x sehari dioleskan tipis',
             ],
         ]);
     }

@@ -35,7 +35,7 @@
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
         <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
-            <h1 class="text-2xl font-bold mb-6">Daftar Kunjungan</h1>
+            <h1 class="text-2xl font-bold mb-6">Data Kunjungan</h1>
 
            <div class="flex flex-wrap gap-2 mb-4">
             <a href="{{ route('kunjungans.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition">
@@ -56,9 +56,9 @@
                 </a>
             @endif
         </div>
-             <div class="overflow-x-auto">
-            <table class="min-w-full text-sm font-light text-white text-center">
-                <thead class="bg-green-800 border-b border-gray-700 uppercase">
+            <div class="overflow-x-auto rounded-lg">
+                <table class="min-w-full text-sm font-light text-white text-center">
+                    <thead class="bg-green-800 border-b border-gray-700 uppercase">
                     <tr>
                         <th class="px-6 py-3">Nama</th>
                         <th class="px-6 py-3">Kelas</th>

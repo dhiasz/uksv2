@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ObatSeeder::class,
             // KunjunganSeeder::class,
             SiswaSeeder::class,
+            AlatMedisSeeder::class,
         ]);
     }
 }

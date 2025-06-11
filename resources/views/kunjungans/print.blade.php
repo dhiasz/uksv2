@@ -66,7 +66,7 @@
             @foreach($kunjungans as $index => $kunjungan)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                     <td class="px-4 py-2 border">{{ $kunjungan->nama }}</td>
+                     <td class="px-4 py-2 border">{{ $kunjungan->siswa->nama ?? '-' }}</td>
                     <td class="px-4 py-2 border">{{ $kunjungan->kelas }}</td>
                     <td class="px-4 py-2 border text-center">{{ $kunjungan->umur }}</td>
                     <td class="px-4 py-2 border">{{ $kunjungan->keluhan }}</td>

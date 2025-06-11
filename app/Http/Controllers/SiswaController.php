@@ -70,5 +70,28 @@ class SiswaController extends Controller
         return redirect()->route('siswas.index')->with('success', 'Data siswa berhasil dihapus');
     }
 
+    public function autocomplete(Request $request)
+    {
+        $term = $request->get('term');
+        $results = [];
+
+        if($term){
+            $query = Siswa::where('nama', 'LIKE', "%{$term}%")->take(10)->get();
+
+            foreach($query as $siswa){
+                $results[] = [
+                    'id' => $siswa->id,
+                    'label' => $siswa->nama,
+                    'value' => $siswa->nama,
+                    'nis' => $siswa->nis,
+                    'tgl' => $siswa->tgl, // sesuaikan nama field
+                ];
+            }
+        }
+
+        return response()->json($results);
+    }
+
+
     
 }

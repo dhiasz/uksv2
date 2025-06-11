@@ -37,13 +37,8 @@
                 <h1 class="text-2xl font-bold mb-6">Daftar Stok Obat</h1>
 
                 <a href="{{ route('stokobats.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block">
-                    Tambah Stok Obat
+                    Stok Obat
                 </a>
-                <a href="{{ route('stokobats.print') }}" 
-                       class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
-                        Print stok obat
-                </a>
-
 
                 @if(session('success'))
                     <div class="mb-4 p-4 text-green-800 bg-green-100 rounded-lg">
@@ -57,7 +52,7 @@
                         <tr>
                             <th class="px-6 py-3">No</th>
                             <th class="px-6 py-3">Nama Obat</th>
-                            <th class="px-6 py-3">Jumlah</th>
+                            <th class="px-6 py-3">Tersisa</th>
                             <th class="px-6 py-3">Dosis</th>
                             <th class="px-6 py-3">Tanggal Masuk</th>
                             <th class="px-6 py-3">Kadaluarsa</th>
@@ -82,7 +77,6 @@
                                 </td>
 
                                 <td class="px-6 py-3 text-black">
-                                    <a href="{{ route('stokobats.edit', $stokobat->id) }}" class="edit-icon" title="Edit"></a>
                                     <form action="{{ route('stokobats.destroy', $stokobat->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus stok ini?')">
                                         @csrf
                                         @method('DELETE')

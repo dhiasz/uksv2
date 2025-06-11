@@ -4,17 +4,12 @@
         <form action="{{ route('kesehatan.store') }}" method="POST">
             @csrf
 
-             {{-- Pilih Siswa --}}
+            {{-- Pilih Siswa --}}
             <div class="mb-4">
-                <label for="siswa_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
-                <select name="siswa_id" id="siswa_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
-                    <option value="" disabled selected>-- Pilih Siswa --</option>
-                    @foreach($siswas as $siswa)
-                        <option value="{{ $siswa->id }}" data-tgl="{{ $siswa->tgl }}" data-nis="{{ $siswa->nis }}" {{ old('siswa_id') == $siswa->id ? 'selected' : '' }}>
-                            {{ $siswa->nama }}
-                        </option>
-                    @endforeach
-                </select>
+                
+                <label for="nama_siswa" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
+                <input type="text" id="nama_siswa" name="nama_siswa" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" autocomplete="off" required>
+                <input type="hidden" name="siswa_id" id="siswa_id" value="{{ old('siswa_id') }}">
                 @error('siswa_id')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
@@ -38,7 +33,7 @@
            {{-- Tinggi Badan --}}
             <div class="mb-4">
                 <label for="tb" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Tinggi Badan (cm)</label>
-                <input type="number" name="tb" id="tb" min="0" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('tb') }}" required>
+                <input type="number" name="tb" id="tb" min="0" max="250" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('tb') }}" required>
                 @error('tb')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
@@ -47,7 +42,7 @@
             {{-- Berat Badan --}}
             <div class="mb-4">
                 <label for="bb" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Berat Badan (kg)</label>
-                <input type="number" name="bb" id="bb" min="0" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('bb') }}" required>
+                <input type="number" name="bb" id="bb" min="0" max="180" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('bb') }}" required>
                 @error('bb')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
@@ -56,7 +51,7 @@
             {{-- Tensi --}}
             <div class="mb-4">
                 <label for="tensi" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Tensi</label>
-                <input type="text" name="tensi" id="tensi" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('tensi') }}" placeholder="Misal: 120/80" >
+                <input type="text" name="tensi" id="tensi" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('tensi') }}" placeholder="Misal: 120/80">
                 @error('tensi')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
@@ -65,7 +60,7 @@
             {{-- Golongan Darah --}}
             <div class="mb-4">
                 <label for="goldar" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Golongan Darah</label>
-                <select name="goldar" id="goldar" min="0" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200">
+                <select name="goldar" id="goldar" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200">
                     <option value="" {{ old('goldar') == '' ? 'selected' : '' }}>-- Pilih Golongan Darah --</option>
                     <option value="A" {{ old('goldar') == 'A' ? 'selected' : '' }}>A</option>
                     <option value="B" {{ old('goldar') == 'B' ? 'selected' : '' }}>B</option>
@@ -77,55 +72,69 @@
                 @enderror
             </div>
 
-            {{-- User ID tersembunyi --}}
-            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+            {{-- User ID (hidden) --}}
+            <input type="hidden" name="user_id" value="{{ auth()->id() }}">
 
             {{-- Tombol Simpan --}}
             <div class="flex justify-end space-x-4">
-                <button type="submit" class="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition">Simpan</button>
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600">
+                    Simpan
+                </button>
             </div>
         </form>
-
-       <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const siswaSelect = document.getElementById('siswa_id');
-        const nisDisplay = document.getElementById('nis_display');
-        const umurInput = document.getElementById('umur');
-
-        function hitungUmur(tglLahir) {
-            if (!tglLahir) return '';
-            const today = new Date();
-            const lahir = new Date(tglLahir);
-            let umur = today.getFullYear() - lahir.getFullYear();
-            const m = today.getMonth() - lahir.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) umur--;
-            return umur;
-        }
-
-        function updateFields() {
-            const selected = siswaSelect.options[siswaSelect.selectedIndex];
-            if (!selected) return;
-            const nis = selected.getAttribute('data-nis') || '';
-            const tgl = selected.getAttribute('data-tgl') || '';
-
-            nisDisplay.value = nis;
-            umurInput.value = hitungUmur(tgl);
-        }
-
-         // Validasi input Tensi agar tidak mengandung karakter minus '-'
-        document.getElementById('tensi').addEventListener('input', function(e) {
-            if (this.value.includes('-')) {
-                this.value = this.value.replace(/-/g, '');
-            }
-        });
-
-        // Panggil sekali saat load
-        updateFields();
-
-        // Tambahkan event listener untuk update saat pilihan berubah
-        siswaSelect.addEventListener('change', updateFields);
-    });
-</script>
-
     </div>
+
+    {{-- jquery & jquery-ui for autocomplete --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function hitungUmur(tglLahir) {
+                if (!tglLahir) return '';
+                const today = new Date();
+                const lahir = new Date(tglLahir);
+                let umur = today.getFullYear() - lahir.getFullYear();
+                const m = today.getMonth() - lahir.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) umur--;
+                return umur;
+            }
+
+            $("#nama_siswa").autocomplete({
+                source: "{{ route('siswa.autocomplete') }}",
+                minLength: 2,
+                select: function(event, ui) {
+                    $('#siswa_id').val(ui.item.id);
+                    $('#nama_siswa').val(ui.item.label);
+                    $('#nis_display').val(ui.item.nis);
+                    $('#umur').val(hitungUmur(ui.item.tgl));
+                }
+            });
+
+            // Reset fields if input cleared
+            $('#nama_siswa').on('change keyup', function() {
+                if ($(this).val() === '') {
+                    $('#siswa_id').val('');
+                    $('#nis_display').val('');
+                    $('#umur').val('');
+                }
+            });
+
+            // Validasi input Tensi agar tidak mengandung karakter minus '-'
+            document.getElementById('tensi').addEventListener('input', function(e) {
+                if (this.value.includes('-')) {
+                    this.value = this.value.replace(/-/g, '');
+                }
+            });
+
+             document.getElementById('tb').addEventListener('input', function () {
+                if (this.value > 250) this.value = 300;
+            });
+
+            document.getElementById('bb').addEventListener('input', function () {
+                if (this.value > 180) this.value = 180;
+            });
+        });
+    </script>
 </x-app-layout>

@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Stokobat extends Model
 {
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
         'obat_id',
         'jumlah',
         'kadaluarsa',
         'masuk',
     ];
+
+    
 
     public function obat()
     {

@@ -9,6 +9,9 @@ use App\Http\Controllers\ObatController;
 use App\Http\Controllers\StokObatController;
 use App\Http\Controllers\RujukanController;
 use App\Http\Controllers\AlatMedisController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\TotalStokObatController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
@@ -57,8 +60,26 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('siswas', \App\Http\Controllers\SiswaController::class);
+    Route::get('/siswa/autocomplete', [SiswaController::class, 'autocomplete'])->name('siswa.autocomplete');
+
+
 
     Route::resource('alatmedis', AlatMedisController::class)->except(['show']);
+
+    
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/kunjungan/filter', [LaporanController::class, 'filterKunjungan'])->name('laporan.kunjungan.filter');
+    Route::get('/laporan/kunjungan/pdf', [LaporanController::class, 'cetakKunjunganPdf'])->name('laporan.kunjungan.pdf');
+    Route::get('/laporan/obat/filter', [LaporanController::class, 'filterObat'])->name('laporan.obat.filter');
+    Route::get('/laporan/obat/pdf', [LaporanController::class, 'cetakObatPdf'])->name('laporan.obat.pdf');
+
+
+
+
+
+
+Route::get('/pengadaan', [TotalStokObatController::class, 'index'])->name('pengadaan.index');
+
 
 });
 

@@ -8,14 +8,27 @@ class Obat extends Model
 {
     protected $fillable = [
         'nama_obat',
-        'jenis_obat',
-        'satuan',
+        'golongan_obat',
         'kategori',
+        'sediaan',
+        'satuan',
         'dosis',
     ];
 
-     public function stokobat(): BelongsTo
+
+
+    public function stokobats()
     {
-        return $this->belongsTo(Stokobat::class);
+        return $this->hasMany(Stokobat::class);
     }
+
+
+    // Optional: relasi total stok (agregat SUM)
+    public function totalStok()
+    {
+        return $this->hasOne(Stokobat::class, 'obat_id')
+                    ->selectRaw('obat_id, SUM(jumlah) as jumlah')
+                    ->groupBy('obat_id');
+    }
+    
 }
