@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('alatmedis', AlatMedisController::class)->except(['show']);
+    Route::get('/alatmedis/print', [AlatMedisController::class, 'print'])->name('alatmedis.print');
+
 
     
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
@@ -72,6 +74,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/kunjungan/pdf', [LaporanController::class, 'cetakKunjunganPdf'])->name('laporan.kunjungan.pdf');
     Route::get('/laporan/obat/filter', [LaporanController::class, 'filterObat'])->name('laporan.obat.filter');
     Route::get('/laporan/obat/pdf', [LaporanController::class, 'cetakObatPdf'])->name('laporan.obat.pdf');
+    Route::get('/laporan/alatmedis/filter', [LaporanController::class, 'filterAlatMedis'])->name('laporan.alatmedis.filter');
+    Route::get('/laporan/alatmedis/cetak', [LaporanController::class, 'cetakAlatMedisPdf'])->name('laporan.alatmedis.cetak');
+
 
 
 

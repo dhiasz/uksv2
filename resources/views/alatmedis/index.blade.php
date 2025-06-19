@@ -54,10 +54,12 @@
                         <tr>
                             <th class="px-6 py-3">No</th>
                             <th class="px-6 py-3">Nama</th>
+                            <th class="px-6 py-3">Kode</th>
                             <th class="px-6 py-3">Kondisi</th>
                             <th class="px-6 py-3">Ditambah pada</th>
                             <th class="px-6 py-3">Diedit pada</th>
                             <th class="px-6 py-3">Aksi</th>
+
                         </tr>
                     </thead>
                     <tbody class="text-white">
@@ -65,6 +67,7 @@
                             <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
                                 <td class="px-6 py-3 text-black">{{ $index + 1 }}</td>
                                 <td class="px-6 py-3 text-black">{{ $alat->nama }}</td>
+                                <td class="px-6 py-3 text-black">{{ $alat->kode }}</td>
                                 <td class="px-6 py-3 text-black">{{ $alat->kondisi }}</td>
                                 <td class="px-6 py-3 text-black">
                                 {{ $alat->created_at->format('d-m-Y H:i') }}

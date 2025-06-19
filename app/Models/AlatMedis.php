@@ -12,6 +12,7 @@ class AlatMedis extends Model
     protected $fillable = [
         'user_id',
         'nama',
+        'kode',
         'kondisi',
         ];
 

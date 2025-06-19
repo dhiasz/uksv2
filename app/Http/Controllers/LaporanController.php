@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kunjungan;
 use App\Models\Stokobat;
+use App\Models\AlatMedis;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -90,4 +91,43 @@ class LaporanController extends Controller
         $pdf = Pdf::loadView('stokobats.print', compact('stokobats'));
         return $pdf->download('stok_obat.pdf');
     }
+
+        // Filter laporan alat medis
+    public function filterAlatMedis(Request $request)
+    {
+        $request->validate([
+            'alatstart_month' => 'required|date_format:Y-m',
+            'alatend_month' => 'required|date_format:Y-m|after_or_equal:alatstart_month',
+        ]);
+
+        $start = $request->alatstart_month . '-01';
+        $end = date('Y-m-t', strtotime($request->alatend_month . '-01'));
+
+        $alatmedis = AlatMedis::with('user')
+            ->whereBetween('created_at', [$start, $end])
+            ->get();
+
+        return view('laporan.index', compact('alatmedis'));
+    }
+
+    // Cetak PDF laporan alat medis
+    public function cetakAlatMedisPdf(Request $request)
+    {
+        $request->validate([
+            'alatstart_month' => 'required|date_format:Y-m',
+            'alatend_month' => 'required|date_format:Y-m|after_or_equal:alatstart_month',
+        ]);
+
+        $start = $request->alatstart_month . '-01';
+        $end = date('Y-m-t', strtotime($request->alatend_month . '-01'));
+
+        $alatmedis = AlatMedis::with('user')
+            ->whereBetween('created_at', [$start, $end])
+            ->get();
+
+        $pdf = Pdf::loadView('alatmedis.print', compact('alatmedis'));
+        return $pdf->download('alat_medis.pdf');
+    }
+
+
 }

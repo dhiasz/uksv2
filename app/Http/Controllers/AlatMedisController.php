@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlatMedis;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class AlatMedisController extends Controller
@@ -32,6 +33,7 @@ class AlatMedisController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'nama' => 'required|string|max:255',
+            'kode' => 'required|string|max:255',
             'kondisi' => 'required|string|max:255',
         ]);
 
@@ -57,6 +59,7 @@ class AlatMedisController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'nama' => 'required|string|max:255',
+            'kode' => 'required|string|max:255',
             'kondisi' => 'required|string|max:255',
         ]);
 
@@ -76,4 +79,14 @@ class AlatMedisController extends Controller
 
         return redirect()->route('alatmedis.index')->with('success', 'Alat medis berhasil dihapus.');
     }
+
+    public function print()
+    {
+        $alatmedis = AlatMedis::all();
+
+        $pdf = Pdf::loadView('alatmedis.print', compact('alatmedis'));
+
+        return $pdf->download('alat_medis.pdf');
+    }
+
 }

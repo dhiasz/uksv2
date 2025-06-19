@@ -15,6 +15,7 @@ return new class extends Migration
         $table->id();
         $table->bigInteger('user_id')->unsigned();
         $table->string('nama');
+        $table->string('kode')->unique();
         $table->string('kondisi');
         $table->timestamps(); 
            

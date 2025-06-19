@@ -28,16 +28,16 @@
 </style>
         <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Manajemen Stok Obat') }}
+            {{ __('Pengadaan Obat') }}
         </h2>
     </x-slot>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
-                <h1 class="text-2xl font-bold mb-6">Daftar Stok Obat</h1>
+                <h1 class="text-2xl font-bold mb-6">Pengadaan Obat</h1>
 
                 <a href="{{ route('stokobats.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition mb-4 inline-block">
-                    Stok Obat
+                    Pengadaan Obat
                 </a>
 
                 @if(session('success'))

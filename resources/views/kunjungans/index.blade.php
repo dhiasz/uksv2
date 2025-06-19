@@ -42,10 +42,6 @@
                 Tambah Kunjungan
             </a>
 
-            <a href="{{ route('kunjungans.print') }}" class="px-4 py-2 bg-red-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
-                Laporan
-            </a>
-
             @if(request()->query('semua') !== 'true')
                 <a href="{{ route('kunjungans.index', ['semua' => 'true']) }}" class="px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
                     Tampilkan Semua Kunjungan

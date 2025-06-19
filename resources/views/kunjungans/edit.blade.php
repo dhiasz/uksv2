@@ -9,7 +9,7 @@
             {{-- Nama Siswa dengan Autocomplete --}}
             <div class="mb-4">
                 <label for="nama_siswa" class="block font-medium mb-2">Nama Siswa</label>
-                <input type="text" id="nama_siswa" name="nama_siswa" class="w-full px-4 py-2 border rounded-lg" autocomplete="off" readonly
+                <input type="text" id="nama_siswa" name="nama_siswa" class="w-full px-4 py-2 border rounded-lg bg-gray-100" autocomplete="off" readonly
                     value="{{ old('nama_siswa', $kunjungan->siswa->nama ?? '') }}">
                 <input type="hidden" name="siswa_id" id="siswa_id" value="{{ old('siswa_id', $kunjungan->siswa_id) }}">
                 @error('siswa_id')
@@ -92,14 +92,14 @@
                 @enderror
             </div>
 
-            {{-- Pilih Obat --}}
+             {{-- Pilih Obat --}}
             <div class="mb-4">
                 <label for="sobat_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Obat yang Digunakan</label>
-                <select name="sobat_id" id="sobat_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200">
+                <select name="sobat_id" id="sobat_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" >
                     <option value="">-- Pilih Obat --</option>
-                    @foreach($obats as $obat)
-                        <option value="{{ $obat->id }}" {{ old('sobat_id') == $obat->id ? 'selected' : '' }}>
-                            {{ $obat->nama_obat }} (Stok: {{ $obat->totalStok->jumlah ?? 0 }})
+                    @foreach($stokobats as $stok)
+                        <option value="{{ $stok->id }}">
+                            {{ $stok->obat->nama_obat }} (Total Stok: {{ $stok->total_jumlah  }})
                         </option>
                     @endforeach
                 </select>

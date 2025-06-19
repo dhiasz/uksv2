@@ -35,7 +35,7 @@ class ObatSeeder extends Seeder
                 'kategori' => 'Analgesik',
                 'sediaan' => 'Tablet',
                 'satuan' => 'pcs',
-                'dosis' => '400 mg 2x sehari',
+                'dosis' => '400 mg',
             ],
             [
                 'nama_obat' => 'Vitamin C',

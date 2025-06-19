@@ -45,9 +45,9 @@
     @foreach($rujukans as $rujukan)
         <div class="rujukan">
             <p><strong>Kepada : {{ @$rujukan->tujuan }}</strong></p>
-            <p>Mohon Pemeriksaan / tindakan lebih lanjut</p>
+            <p>Mohon Pemeriksaan / tindakan lebih lanjut kepada : </p>
             <table>
-                <tr><td style="padding-left: 30px;" class="label">Nama</td><td>: {{ $rujukan->kunjungan->nama }}</td></tr>
+                <tr><td style="padding-left: 30px;" class="label">Nama</td><td>: {{ $rujukan->kunjungan->siswa->nama }}</td></tr>
                 <tr><td style="padding-left: 30px;" class="label">Umur</td><td>: {{ $rujukan->kunjungan->umur }} tahun</td></tr>
                 <tr><td style="padding-left: 30px;" class="label">Alamat Rujukan</td><td>: {{ $rujukan->alamat }}</td></tr>
                 <tr><td style="padding-left: 30px;" class="label">Diagnosa</td><td>: {{ $rujukan->diagnosa }}</td></tr>

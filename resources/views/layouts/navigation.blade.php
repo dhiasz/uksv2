@@ -21,7 +21,11 @@
                     </x-nav-link>
 
                     <x-nav-link :href="route('stokobats.index')" :active="request()->routeIs('stokobats.index')">
-                            {{ __('StokObat') }}
+                            {{ __('Pengadaan') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('pengadaan.index')" :active="request()->routeIs('pengadaan.index')">
+                        {{ __('Stok Obat') }}
                     </x-nav-link>
                     
                      <x-nav-link :href="route('siswas.index')" :active="request()->routeIs('siswas.index')">
@@ -32,14 +36,15 @@
                             {{ __('Kesehatan') }}
                     </x-nav-link>
                     
+                     <x-nav-link :href="route('alatmedis.index')" :active="request()->routeIs('alatmedis.index')">
+                            {{ __('Alat Medis') }}
+                    </x-nav-link>
+                    
                     <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.index')">
                         {{ __('Laporan') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('pengadaan.index')" :active="request()->routeIs('pengadaan.index')">
-                        {{ __('Pengadaan') }}
-                    </x-nav-link>
-                    
+
                 </div>
             </div>
 
@@ -104,7 +109,11 @@
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('stokobats.index')" :active="request()->routeIs('stokobats.index')">
-                            {{ __('StokObat') }}
+                            {{ __('Pengadaan') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('pengadaan.index')" :active="request()->routeIs('pengadaan.index')">
+                            {{ __('Stok Obat') }}
             </x-responsive-nav-link>
                     
             <x-responsive-nav-link :href="route('siswas.index')" :active="request()->routeIs('siswas.index')">
@@ -117,6 +126,10 @@
 
             <x-responsive-nav-link :href="route('alatmedis.index')" :active="request()->routeIs('alatmedis.index')">
                             {{ __('Alatmedis') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.index')">
+                            {{ __('Laporan') }}
             </x-responsive-nav-link>
         </div>
 

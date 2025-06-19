@@ -13,7 +13,6 @@
                         <th class="px-6 py-3">bentuk Sediaan</th>
                         <th class="px-6 py-3">Satuan</th>
                         <th class="px-6 py-3">dosis</th>
-                        <th class="px-6 py-3">Aksi</th>
                         <th class="px-6 py-3">Total Stok</th>
                     </tr>
                 </thead>
@@ -27,14 +26,6 @@
                             <td class="px-6 py-3 text-black">{{ $obat->sediaan }}</td>
                             <td class="px-6 py-3 text-black">{{ $obat->satuan }}</td>
                             <td class="px-6 py-3 text-black">{{ $obat->dosis }}</td>
-                            <td class="px-6 py-3 text-black">
-                                <a href="{{ route('obats.edit', $obat->id) }}" class="edit-icon" title="Edit"></a>
-                                <form action="{{ route('obats.destroy', $obat->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="edit-icon-sampah" title="Hapus"></button>
-                                </form>
-                            </td>
                             <td class="px-4 py-2 text-gray-700 dark:text-gray-300">
                                 {{ $obat->totalStok->jumlah ?? 0 }}
                             </td>

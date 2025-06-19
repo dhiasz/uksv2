@@ -140,6 +140,67 @@
             @endif
         </div>
 
+
+    {{-- Laporan Alat Medis --}}
+    <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 mt-8">
+        <h1 class="text-2xl font-bold mb-6">Laporan Alat Medis</h1>
+
+        <form action="{{ route('laporan.alatmedis.filter') }}" method="GET" class="flex flex-wrap items-end gap-4">
+            <div class="flex flex-col">
+                <label for="alatstart_month" class="mb-1 font-medium text-gray-700 dark:text-gray-200">Dari Bulan:</label>
+                <input type="month" id="alatstart_month" name="alatstart_month" required value="{{ request('alatstart_month') ?? '' }}" class="border rounded px-3 py-2 dark:bg-gray-700 dark:text-white">
+            </div>
+            <div class="flex flex-col">
+                <label for="alatend_month" class="mb-1 font-medium text-gray-700 dark:text-gray-200">Sampai Bulan:</label>
+                <input type="month" id="alatend_month" name="alatend_month" required value="{{ request('alatend_month') ?? '' }}" class="border rounded px-3 py-2 dark:bg-gray-700 dark:text-white">
+            </div>
+            <div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tampilkan Data</button>
+            </div>
+        </form>
+
+        @if(isset($alatmedis))
+            <h3 class="text-lg font-semibold mt-8">Hasil Data Alat Medis</h3>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="min-w-full text-sm font-light text-white text-center">
+                    <thead class="bg-green-800 border-b border-gray-700 uppercase">
+                        <tr>
+                            <th class="px-6 py-3">No</th>
+                            <th class="px-6 py-3">Nama</th>
+                            <th class="px-6 py-3">Kode</th>
+                            <th class="px-6 py-3">Kondisi</th>
+                            <th class="px-6 py-3">Ditambah pada</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-white">
+                        @forelse($alatmedis as $index => $alat)
+                            <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
+                                <td class="px-6 py-3 text-black">{{ $index + 1 }}</td>
+                                <td class="px-6 py-3 text-black">{{ $alat->nama }}</td>
+                                <td class="px-6 py-3 text-black">{{ $alat->kode }}</td>
+                                <td class="px-6 py-3 text-black">{{ $alat->kondisi }}</td>
+                                <td class="px-6 py-3 text-black">
+                                {{ $alat->created_at->format('d-m-Y H:i') }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-gray-400">Belum ada data alat medis.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <form action="{{ route('laporan.alatmedis.cetak') }}" method="GET" target="_blank" class="mt-6">
+                <input type="hidden" name="alatstart_month" value="{{ request('alatstart_month') ?? '' }}">
+                <input type="hidden" name="alatend_month" value="{{ request('alatend_month') ?? '' }}">
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Download PDF</button>
+            </form>
+        @endif
+    </div>
+
+
     </div>
 
 </x-app-layout>
