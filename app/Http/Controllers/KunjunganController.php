@@ -98,8 +98,28 @@ class KunjunganController extends Controller
         $kunjungan = Kunjungan::findOrFail($id);
         $users = User::all();
         $siswas = Siswa::all();
-        $stokobats = Stokobat::with('obat')->get();
-        return view('kunjungans.edit', compact('kunjungan', 'users', 'stokobats', 'siswas'));
+        $stokobats = Stokobat::select('obat_id')
+        ->groupBy('obat_id')
+        ->get()
+        ->map(function ($item) {
+        // Ambil semua stok berdasarkan obat_id (urutan dari ID terkecil ke terbesar)
+        $stokList = Stokobat::with('obat')
+            ->where('obat_id', $item->obat_id)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        // Cari stok pertama yang jumlahnya > 0
+        $stokDipilih = $stokList->firstWhere('jumlah', '>', 0);
+
+        // Jika tidak ada yang jumlah > 0, ambil stok terakhir (terbaru)
+        $stokDipilih = $stokDipilih ?? $stokList->last();
+
+        // Tambahkan total jumlah semua stok untuk obat ini
+        $stokDipilih->total_jumlah = $stokList->sum('jumlah');
+
+        return $stokDipilih;
+    });
+        return view('kunjungans.edit', compact('kunjungan', 'users', 'stokobats', 'siswas'))->with('success', 'Data kunjungan berhasil disimpan.');
     }
 
     public function update(Request $request, $id)

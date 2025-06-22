@@ -35,7 +35,8 @@ class ObatController extends Controller
             'kategori' => 'required|string|max:255',
             'sediaan' => 'required|string|max:255',
             'satuan' => 'required|string|max:255',
-            'dosis' => 'string|max:255',
+            'dosis' => ['required', 'string', 'min:1', 'max:255', 'not_regex:/^-/'],
+
         ]);
 
         Obat::create($request->all());
@@ -63,7 +64,7 @@ class ObatController extends Controller
             'kategori' => 'required|string|max:255',
             'sediaan' => 'required|string|max:255',
             'satuan' => 'required|string|max:255',
-            'dosis' => 'string|max:255',
+            'dosis' => ['required', 'string', 'min:1', 'max:255', 'not_regex:/^-/'],
         ]);
 
         $obat = Obat::findOrFail($id);

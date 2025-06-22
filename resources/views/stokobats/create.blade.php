@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="max-w-4xl mx-auto mt-10 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">Tambah Stok Obat</h1>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">Pengadaan Obat</h1>
 
         <form action="{{ route('stokobats.store') }}" method="POST">
             @csrf

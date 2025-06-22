@@ -92,7 +92,7 @@
                 @enderror
             </div>
 
-             {{-- Pilih Obat --}}
+            {{-- Pilih Obat --}}
             <div class="mb-4">
                 <label for="sobat_id" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Obat yang Digunakan</label>
                 <select name="sobat_id" id="sobat_id" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" >
@@ -117,7 +117,7 @@
         </form>
     </div>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 

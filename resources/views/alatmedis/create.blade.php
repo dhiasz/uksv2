@@ -14,15 +14,23 @@
                 @enderror
             </div>
 
+            {{-- Kode Alat Medis --}}
+            <div class="mb-4">
+                <label for="kode" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">kode Alat</label>
+                <input type="text" name="kode" id="kode" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('kode') }}" required>
+                @error('kode')
+                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+
             {{-- Kondisi --}}
             <div class="mb-4">
                 <label for="kondisi" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Kondisi</label>
                 <select name="kondisi" id="kondisi" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
                     <option value="">-- Pilih Kondisi --</option>
                     <option value="Baik" {{ old('kondisi') == 'Baik' ? 'selected' : '' }}>Baik</option>
-                    <option value="Rusak Ringan" {{ old('kondisi') == 'Rusak Ringan' ? 'selected' : '' }}>Baik ke Sedang</option>
-                    <option value="Rusak Berat" {{ old('kondisi') == 'Rusak Berat' ? 'selected' : '' }}>Sedang ke Rusak</option>
-                    <option value="Rusak Berat" {{ old('kondisi') == 'Rusak Berat' ? 'selected' : '' }}>Rusak</option>
+                    <option value="Sedang" {{ old('kondisi') == 'Sedang' ? 'selected' : '' }}>Sedang</option>
+                    <option value="Rusak" {{ old('kondisi') == 'Rusak' ? 'selected' : '' }}>Rusak</option>
                     <option value="Rusak Berat" {{ old('kondisi') == 'Rusak Berat' ? 'selected' : '' }}>Rusak Berat</option>
                 </select>
                 @error('kondisi')

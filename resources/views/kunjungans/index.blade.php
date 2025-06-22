@@ -32,6 +32,7 @@
             {{ __('Data Kunjungan') }}
         </h2>
     </x-slot>
+    
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
         <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
@@ -41,6 +42,12 @@
             <a href="{{ route('kunjungans.create') }}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition">
                 Tambah Kunjungan
             </a>
+            
+            @if(session('success'))
+                <div class="mb-4 p-4 text-green-800 bg-green-100 rounded-lg">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             @if(request()->query('semua') !== 'true')
                 <a href="{{ route('kunjungans.index', ['semua' => 'true']) }}" class="px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
