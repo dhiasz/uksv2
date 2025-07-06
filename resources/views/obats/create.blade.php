@@ -63,8 +63,12 @@
                 <label for="satuan" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Satuan</label>
                 <select name="satuan" id="satuan" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
                     <option value="">-- Pilih Satuan --</option>
-                    <option value="mg" {{ old('satuan') == 'Pcs' ? 'selected' : '' }}>Pcs</option>
-                    <option value="ml" {{ old('satuan') == 'Botol' ? 'selected' : '' }}>Botol</option>
+                    <option value="Pcs" {{ old('satuan') == 'Pcs' ? 'selected' : '' }}>Pcs</option>
+                    <option value="Botol" {{ old('satuan') == 'Botol' ? 'selected' : '' }}>Botol</option>
+                    <option value="Box" {{ old('satuan') == 'Box' ? 'selected' : '' }}>Box</option>
+                    <option value="Buah" {{ old('satuan') == 'Buah' ? 'selected' : '' }}>Buah</option>
+                    <option value="Pak" {{ old('satuan') == 'Pak' ? 'selected' : '' }}>Pak</option>
+                    <option value="Stips" {{ old('satuan') == 'Stips' ? 'selected' : '' }}>Stips</option>
                 </select>
                 @error('satuan')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
