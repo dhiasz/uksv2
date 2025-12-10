@@ -1,7 +1,7 @@
-# Base image PHP 8.2 dengan tools dasar
-FROM php:8.2-fpm
+# Image dasar: PHP 8.2 + Apache
+FROM php:8.2-apache
 
-# Install dependencies OS
+# Install dependency OS yang dibutuhkan Laravel + Excel
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -13,21 +13,32 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql zip
 
-# Copy composer dari image resmi composer
+# Aktifkan mod_rewrite untuk Laravel
+RUN a2enmod rewrite
+
+# Set DocumentRoot ke folder public Laravel
+ENV APACHE_DOCUMENT_ROOT=/var/www/public
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf && \
+    sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Copy composer dari image resmi
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy seluruh project ke dalam container
+# Copy seluruh project ke container
 COPY . .
 
-# Install dependensi Laravel (di container, bukan host)
+# Install dependency Laravel
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Set permission storage & bootstrap cache
+# Permission untuk storage & cache
 RUN chmod -R 777 storage bootstrap/cache
 
-EXPOSE 9000
+# Expose port HTTP
+EXPOSE 80
 
-CMD ["php-fpm"]
+# Jalankan Apache
+CMD ["apache2-foreground"]
