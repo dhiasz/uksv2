@@ -38,8 +38,26 @@
     </style>
 </head>
 <body>
-    <h2>UNIT KESEHATAN SEKOLAH</h2>
-    <h2><STRONG>_______________________________________________________</STRONG></h2>
+    <table width="100%" style="border-bottom: 2px solid #000; margin-bottom: 20px;">
+    <tr>
+            <!-- Logo Kiri -->
+            <td width="20%" align="left">
+                <img src="{{ public_path('logo-smk.png') }}" alt="Logo UKS" style="width: 100px;">
+            </td>
+
+            <!-- Judul Tengah -->
+            <td width="60%" align="center">
+                <h2 style="margin: 0; font-size: 18px;">UNIT KESEHATAN SEKOLAH</h2>
+                <h3 style="margin: 5px 0 0 0; font-size: 15px;">SURAT RUJUKAN SMK</h3>
+            </td>
+
+            <!-- Logo Kanan -->
+            <td width="20%" align="right">
+                <img src="{{ public_path('logo-pmr.png') }}" alt="Logo PMR" style="width: 100px;">
+            </td>
+        </tr>
+    </table>
+
     <h3>SURAT RUJUKAN SMK</h3>
 
     @foreach($rujukans as $rujukan)
@@ -47,10 +65,11 @@
             <p><strong>Kepada : {{ @$rujukan->tujuan }}</strong></p>
             <p>Mohon Pemeriksaan / tindakan lebih lanjut kepada : </p>
             <table>
-                <tr><td style="padding-left: 30px;" class="label">Nama</td><td>: {{ $rujukan->kunjungan->siswa->nama }}</td></tr>
+                <tr><td style="padding-left: 30px;" class="label">Nama</td><td>: {{ $rujukan->kunjungan->nama }}</td></tr>
                 <tr><td style="padding-left: 30px;" class="label">Umur</td><td>: {{ $rujukan->kunjungan->umur }} tahun</td></tr>
                 <tr><td style="padding-left: 30px;" class="label">Alamat Rujukan</td><td>: {{ $rujukan->alamat }}</td></tr>
                 <tr><td style="padding-left: 30px;" class="label">Diagnosa</td><td>: {{ $rujukan->diagnosa }}</td></tr>
+                <tr><td style="padding-left: 30px;" class="label">Tanggal</td><td>: {{ $rujukan->created_at->translatedFormat('d F Y') }}</td></tr>
             </table>
 
             <p>Demikian surat rujukan ini diberikan untuk dapat di pergunakan semestinya </p>

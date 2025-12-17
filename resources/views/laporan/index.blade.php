@@ -30,8 +30,49 @@
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tampilkan Data</button>
                 </div>
             </form>
-
             @if(isset($kunjungans))
+            <h3 class="text-lg font-semibold mt-8">Rekap Jumlah Kunjungan</h3>
+
+            <div class="overflow-x-auto rounded-lg">
+                <table class="min-w-full text-sm text-center">
+                    <thead class="bg-green-800 text-white uppercase">
+                        <tr>
+                            <th class="px-4 py-3">No</th>
+                            <th class="px-4 py-3">Nama</th>
+                            <th class="px-4 py-3">Kelas</th>
+                            <th class="px-4 py-3">Umur</th>
+                            <th class="px-4 py-3">Jumlah Kunjungan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($kunjungans as $i => $kunjungan)
+                            <tr class="{{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                <td class="px-4 py-2 text-black">{{ $i + 1 }}</td>
+                                <td class="px-4 py-2 text-black">{{ $kunjungan->nama }}</td>
+                                <td class="px-4 py-2 text-black">{{ $kunjungan->kelas }}</td>
+                                <td class="px-4 py-2 text-black">{{ $kunjungan->umur }}</td>
+                                <td class="px-4 py-2 text-black font-bold">
+                                    {{ $kunjungan->total_kunjungan }} kali
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-4 text-gray-400">
+                                    Tidak ada data rekap.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+                <form action="{{ route('laporan.kunjungan.pdf') }}" method="GET" class="mt-6">
+                    <input type="hidden" name="start_month" value="{{ request('start_month') ?? '' }}">
+                    <input type="hidden" name="end_month" value="{{ request('end_month') ?? '' }}">
+                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Download PDF</button>
+                </form>
+            @endif
+
+            {{-- @if(isset($kunjungans))
                 <h3 class="text-lg font-semibold mt-8">Hasil Data Kunjungan</h3>
                 <div class="overflow-x-auto rounded-lg">
                     <table class="min-w-full text-sm font-light text-white text-center">
@@ -49,7 +90,7 @@
                         <tbody class="text-white">
                             @forelse($kunjungans as $index => $kunjungan)
                                 <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
-                                    <td class="px-6 py-3 text-black">{{ $kunjungan->siswa->nama ?? '-' }}</td>
+                                    <td class="px-6 py-3 text-black">{{ $kunjungan->nama ?? '-' }}</td>
                                     <td class="px-6 py-3 text-black">{{ $kunjungan->kelas }}</td>
                                     <td class="px-6 py-3 text-black">{{ $kunjungan->umur }}</td>
                                     <td class="px-6 py-3 text-black">{{ $kunjungan->keluhan }}</td>
@@ -71,7 +112,7 @@
                     <input type="hidden" name="end_month" value="{{ request('end_month') ?? '' }}">
                     <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Download PDF</button>
                 </form>
-            @endif
+            @endif --}}
         </div>
 
         {{-- Laporan Obat --}}

@@ -70,6 +70,7 @@
                         <th class="px-6 py-3">Tindakan</th>
                         <th class="px-6 py-3">Obat</th>
                         <th class="px-6 py-3">User</th>
+                        <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3">Tgl Kunjungan</th>
                         <th class="px-6 py-3">Tgl Diedit</th>
                         <th class="px-6 py-3">Aksi</th>
@@ -78,7 +79,7 @@
                 <tbody class="text-white">
                     @forelse($kunjungans as $index => $kunjungan)
                         <tr class="{{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
-                            <td class="px-6 py-3 text-black">{{ $kunjungan->siswa->nama }}</td>
+                            <td class="px-6 py-3 text-black">{{ $kunjungan->nama }}</td>
                             <td class="px-6 py-3 text-black">{{ $kunjungan->kelas }}</td>
                             <td class="px-6 py-3 text-black">{{ $kunjungan->umur }}</td>
                             <td class="px-6 py-3 text-black">{{ $kunjungan->keluhan }}</td>
@@ -89,6 +90,7 @@
                             <td class="px-6 py-3 text-black">
                                 {{ $kunjungan->user->username ?? '-' }}
                             </td>
+                            <td class="px-6 py-3 text-black">{{ $kunjungan->status ?? 'Dirawat' }}</td>
                             <td class="px-6 py-3 text-black">
                                 {{ $kunjungan->created_at->format('d-m-Y H:i') }}
                             </td>

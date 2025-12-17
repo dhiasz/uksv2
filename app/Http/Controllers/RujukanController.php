@@ -32,7 +32,7 @@ class RujukanController extends Controller
     Rujukan::create($validated);
 
     // Ambil rujukan terbaru
-    $rujukan = Rujukan::with(['kunjungan.user', 'kunjungan.obat'])
+    $rujukan = Rujukan::with(['kunjungan.user'])
         ->where('kunjungan_id', $kunjungan_id)
         ->latest()
         ->first();
@@ -40,7 +40,7 @@ class RujukanController extends Controller
     $rujukans = collect([$rujukan]);
 
     // Generate PDF
-    $pdf = \PDF::loadView('rujukans.print', compact('rujukans'));
+    $pdf = PDF::loadView('rujukans.print', compact('rujukans'));
 
     // ✅ Langsung download PDF
     return redirect()->route('rujukans.print', $kunjungan_id);
@@ -52,7 +52,7 @@ class RujukanController extends Controller
 
     public function print($kunjungan_id)
     {
-        $rujukan = Rujukan::with(['kunjungan.user', 'kunjungan.obat'])
+        $rujukan = Rujukan::with(['kunjungan.user'])
         ->where('kunjungan_id', $kunjungan_id)
         ->orderBy('created_at', 'desc')
         ->first();

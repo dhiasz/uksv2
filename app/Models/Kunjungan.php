@@ -3,50 +3,37 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Kunjungan extends Model
 {
-    protected $table = 'kunjungans'; // Nama tabel
+    protected $table = 'kunjungans';
 
-    // Field yang boleh diisi mass assignment
     protected $fillable = [
         'user_id',
-        'siswa_id',
+        'sobat_id',
+        'nama',
         'kelas',
         'umur',
         'keluhan',
         'tindakan',
-        'sobat_id',
+        'status',
     ];
 
-    // Definisikan relasi ke model Siswa
-    public function siswa()
-    {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
-    }
-    
+    // Relasi ke User (petugas)
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    // Relasi ke Stok Obat
     public function stokobat()
     {
         return $this->belongsTo(Stokobat::class, 'sobat_id');
     }
 
-
-    
-        public function obat()
+    // Relasi ke Rujukan (1 kunjungan bisa punya 1 rujukan)
+    public function rujukan()
     {
-    return $this->belongsTo(Obat::class, 'obat_id');
+        return $this->hasOne(Rujukan::class);
     }
-
-     // Relasi ke Rujukan
-    public function rujukans()
-    {
-        return $this->belongsTo(Rujukan::class);
-    }
-
 }

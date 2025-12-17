@@ -17,67 +17,93 @@
                 <form action="{{ route('kunjungans.store') }}" method="POST">
                     @csrf
 
-            {{-- Nama Siswa dengan Autocomplete --}}
+                        {{-- Nama Pasien --}}
             <div class="mb-4">
-                <label for="nama_siswa" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
-                <input type="text" id="nama_siswa" name="nama_siswa" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" autocomplete="off" required>
-                <input type="hidden" name="siswa_id" id="siswa_id"> {{-- Hidden ID hasil dari autocomplete --}}
-                @error('siswa_id')
+                <label for="nama" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                    Nama Pasien
+                </label>
+                <input
+                    type="text"
+                    name="nama"
+                    id="nama"
+                    class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
+                    value="{{ old('nama') }}"
+                    required
+                >
+                @error('nama')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
             </div>
 
-            {{-- NIS (otomatis terisi) --}}
+            {{-- Umur --}}
             <div class="mb-4">
-                <label for="nis_display" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">NIS</label>
-                <input type="text" id="nis_display" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200 bg-gray-100" readonly>
-            </div>
-
-            {{-- Umur (otomatis terisi) --}}
-            <div class="mb-4">
-                <label for="umur" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Usia</label>
-                <input type="number" name="umur" id="umur" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200 bg-gray-100" value="{{ old('umur') }}" required readonly>
+                <label for="umur" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                    Umur
+                </label>
+                <input
+                    type="number"
+                    name="umur"
+                    id="umur"
+                    min="1"
+                    class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
+                    value="{{ old('umur') }}"
+                    required
+                >
                 @error('umur')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
             </div>
 
-            {{-- Kelas, Jurusan, Kelas Ke digabung --}}
+            {{-- Detail Kelas --}}
             <div class="mb-4">
-                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Detail Kelas</label>
-                <div class="grid grid-cols-3 gap-4">
-                    {{-- Tingkat Kelas --}}
-                    <select name="kelas_tingkat" id="kelas_tingkat" class="px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
-                        <option value="" disabled selected>-- Tingkat --</option>
-                        <option value="X" {{ old('kelas_tingkat') == 'X' ? 'selected' : '' }}>X</option>
-                        <option value="XI" {{ old('kelas_tingkat') == 'XI' ? 'selected' : '' }}>XI</option>
-                        <option value="XII" {{ old('kelas_tingkat') == 'XII' ? 'selected' : '' }}>XII</option>
-                    </select>
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                    Detail Kelas
+                </label>
 
-                    {{-- Jurusan --}}
-                    <select name="kelas_jurusan" id="kelas_jurusan" class="px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
+    <div class="grid grid-cols-12 gap-4">
+
+        {{-- Tingkat (kecil) --}}
+        <div class="col-span-2">
+            <select name="kelas_tingkat"  id="kelas_tingkat"  class="w-full px-2 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200 text-sm"  required >
+                <option value="" disabled selected>--</option>
+                <option value="X" {{ old('kelas_tingkat') == 'X' ? 'selected' : '' }}>X</option>
+                <option value="XI" {{ old('kelas_tingkat') == 'XI' ? 'selected' : '' }}>XI</option>
+                <option value="XII" {{ old('kelas_tingkat') == 'XII' ? 'selected' : '' }}>XII</option>
+            </select>
+        </div>
+
+                {{-- Jurusan (lebar) --}}
+                <div class="col-span-7">
+                    <select name="kelas_jurusan"  id="kelas_jurusan"  class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
                         <option value="" disabled selected>-- Jurusan --</option>
-                        <option value="Teknik Kendaraan Ringan Otomotif" {{ old('kelas_jurusan') == 'Teknik Kendaraan Ringan Otomotif' ? 'selected' : '' }}>Teknik Kendaraan Ringan Otomotif</option>
-                        <option value="Teknik Komputer dan Jaringan" {{ old('kelas_jurusan') == 'Teknik Komputer dan Jaringan' ? 'selected' : '' }}>Teknik Komputer dan Jaringan</option>
-                        <option value="Agribisnis Pengolahan Hasil Pertanian" {{ old('kelas_jurusan') == 'Agribisnis Pengolahan Hasil Pertanian' ? 'selected' : '' }}>Agribisnis Pengolahan Hasil Pertanian</option>
-                        <option value="Bisnis Daring dan Pemasaran" {{ old('kelas_jurusan') == 'Bisnis Daring dan Pemasaran' ? 'selected' : '' }}>Bisnis Daring dan Pemasaran</option>
-                        <option value="Otomatisasi dan Tata Kelola Perkantoran" {{ old('kelas_jurusan') == 'Otomatisasi dan Tata Kelola Perkantoran' ? 'selected' : '' }}>Otomatisasi dan Tata Kelola Perkantoran</option>
-                        <option value="Akuntansi dan Keuangan Lembaga" {{ old('kelas_jurusan') == 'Akuntansi dan Keuangan Lembaga' ? 'selected' : '' }}>Akuntansi dan Keuangan Lembaga</option>
-                        <option value="Perhotelan" {{ old('kelas_jurusan') == 'Perhotelan' ? 'selected' : '' }}>Perhotelan</option>
+                        <option value="Teknik Kendaraan Ringan Otomotif" {{ old('kelas_jurusan') == 'Teknik Kendaraan Ringan Otomotif' ? 'selected' : '' }}> Teknik Kendaraan Ringan Otomotif </option>
+                        <option value="Teknik Komputer dan Jaringan" {{ old('kelas_jurusan') == 'Teknik Komputer dan Jaringan' ? 'selected' : '' }}>  Teknik Komputer dan Jaringan  </option>
+                        <option value="Agribisnis Pengolahan Hasil Pertanian" {{ old('kelas_jurusan') == 'Agribisnis Pengolahan Hasil Pertanian' ? 'selected' : '' }}>  Agribisnis Pengolahan Hasil Pertanian </option>
+                        <option value="Bisnis Daring dan Pemasaran" {{ old('kelas_jurusan') == 'Bisnis Daring dan Pemasaran' ? 'selected' : '' }}> Bisnis Daring dan Pemasaran  </option>
+                        <option value="Otomatisasi dan Tata Kelola Perkantoran" {{ old('kelas_jurusan') == 'Otomatisasi dan Tata Kelola Perkantoran' ? 'selected' : '' }}> Otomatisasi dan Tata Kelola Perkantoran </option>
+                        <option value="Akuntansi dan Keuangan Lembaga" {{ old('kelas_jurusan') == 'Akuntansi dan Keuangan Lembaga' ? 'selected' : '' }}> Akuntansi dan Keuangan Lembaga </option>
+                        <option value="Perhotelan" {{ old('kelas_jurusan') == 'Perhotelan' ? 'selected' : '' }}> Perhotelan  </option>
                     </select>
+                </div>
 
-                    {{-- Kelas Ke --}}
-                    <select name="kelas_ke" id="kelas_ke" class="px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
-                        <option value="" disabled selected>-- Kelas Ke --</option>
+                {{-- Kelas Ke (sedang) --}}
+                <div class="col-span-3">
+                    <select name="kelas_ke" id="kelas_ke" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required  >
+                        <option value="" disabled selected>-- Kelas --</option>
                         @for($i = 1; $i <= 6; $i++)
-                            <option value="{{ $i }}" {{ old('kelas_ke') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                            <option value="{{ $i }}" {{ old('kelas_ke') == $i ? 'selected' : '' }}>
+                                {{ $i }}
+                            </option>
                         @endfor
                     </select>
                 </div>
-                @error('kelas')
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                @enderror
+
             </div>
+
+            @error('kelas')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            @enderror
+</div>
 
             {{-- Hidden Gabungkan Kelas --}}
             <input type="hidden" name="kelas" id="kelas_gabungan" value="{{ old('kelas') }}">
@@ -113,6 +139,18 @@
                 </select>
             </div>
 
+            
+            {{-- Status --}}
+            <div class="mb-4">
+                <label for="status" class="block text-gray-700 dark:text-gray-300 font-medium mb-2"> Status </label>
+                <select  name="status" id="status"  class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" required>
+                    <option value="">-- Pilih Status --</option>
+                    <option value="Ditangani">Ditangani</option>
+                    <option value="Dirujuk">Dirujuk</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
+
             {{-- User ID --}}
             <input type="hidden" name="user_id" value="{{ auth()->id() }}">
 
@@ -138,43 +176,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const siswaSelect = document.getElementById('siswa_id');
-            const nisDisplay = document.getElementById('nis_display');
-            const umurInput = document.getElementById('umur');
             const tingkat = document.getElementById('kelas_tingkat');
             const jurusan = document.getElementById('kelas_jurusan');
             const ke = document.getElementById('kelas_ke');
             const gabungan = document.getElementById('kelas_gabungan');
 
-            function hitungUmur(tglLahir) {
-                if (!tglLahir) return '';
-                const today = new Date();
-                const lahir = new Date(tglLahir);
-                let umur = today.getFullYear() - lahir.getFullYear();
-                const m = today.getMonth() - lahir.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) umur--;
-                return umur;
-            }
-
-             // Autocomplete Nama Siswa
-            $("#nama_siswa").autocomplete({
-                source: "{{ route('siswa.autocomplete') }}",
-                minLength: 2,
-                select: function (event, ui) {
-                    $('#siswa_id').val(ui.item.id); // Hidden input
-                    $('#nis_display').val(ui.item.nis);
-                    $('#umur').val(hitungUmur(ui.item.tgl));
-                }
-            });
-
-            function updateFields() {
-                const selected = siswaSelect.options[siswaSelect.selectedIndex];
-                const nis = selected.getAttribute('data-nis') || '';
-                const tgl = selected.getAttribute('data-tgl') || '';
-
-                nisDisplay.value = nis;
-                umurInput.value = hitungUmur(tgl);
-            }
 
             function updateKelasGabungan() {
                 const v1 = tingkat.value;
@@ -184,13 +190,11 @@
                 else gabungan.value = '';
             }
 
-            siswaSelect.addEventListener('change', updateFields);
             tingkat.addEventListener('change', updateKelasGabungan);
             jurusan.addEventListener('change', updateKelasGabungan);
             ke.addEventListener('change', updateKelasGabungan);
 
             // Inisialisasi saat load
-            updateFields();
             updateKelasGabungan();
         });
     </script>

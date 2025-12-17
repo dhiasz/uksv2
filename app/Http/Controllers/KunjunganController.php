@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kunjungan;
 use App\Models\Stokobat;
 use App\Models\User;
-use App\Models\Siswa;
+
 
 use Illuminate\Http\Request;
 use App\Exports\KunjunganExport;
@@ -21,7 +21,7 @@ class KunjunganController extends Controller
     {
         $today = Carbon::today();
 
-        $kunjungans = Kunjungan::with(['stokobat.obat', 'user', 'siswa'])
+        $kunjungans = Kunjungan::with(['user', 'stokobat.obat'])
             ->when($request->query('semua') !== 'true', function ($query) use ($today) {
                 $query->whereDate('created_at', $today);
             })
@@ -39,47 +39,51 @@ class KunjunganController extends Controller
         return view('kunjungans.index', compact('kunjungans', 'statistik'));
     }
 
-    public function create()
+     public function create()
     {
-        $users = User::all();
-        $siswas = Siswa::all();
         $stokobats = Stokobat::select('obat_id')
-        ->groupBy('obat_id')
-        ->get()
-        ->map(function ($item) {
-        // Ambil semua stok berdasarkan obat_id (urutan dari ID terkecil ke terbesar)
-        $stokList = Stokobat::with('obat')
-            ->where('obat_id', $item->obat_id)
-            ->orderBy('id', 'asc')
-            ->get();
+            ->groupBy('obat_id')
+            ->get()
+            ->map(function ($item) {
+                $stokList = Stokobat::with('obat')
+                    ->where('obat_id', $item->obat_id)
+                    ->orderBy('id', 'asc')
+                    ->get();
 
-        // Cari stok pertama yang jumlahnya > 0
-        $stokDipilih = $stokList->firstWhere('jumlah', '>', 0);
+                $stokDipilih = $stokList->firstWhere('jumlah', '>', 0)
+                    ?? $stokList->last();
 
-        // Jika tidak ada yang jumlah > 0, ambil stok terakhir (terbaru)
-        $stokDipilih = $stokDipilih ?? $stokList->last();
+                $stokDipilih->total_jumlah = $stokList->sum('jumlah');
 
-        // Tambahkan total jumlah semua stok untuk obat ini
-        $stokDipilih->total_jumlah = $stokList->sum('jumlah');
+                return $stokDipilih;
+            });
 
-        return $stokDipilih;
-    });
-
-        return view('kunjungans.create', compact('users', 'stokobats', 'siswas'));
+        return view('kunjungans.create', compact('stokobats'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'siswa_id' => 'required|exists:siswas,id',
-            'sobat_id' => 'nullable|exists:stokobats,id',
-            'kelas' => 'required|string',
-            'umur' => 'required|integer',
-            'keluhan' => 'required|string',
-            'tindakan' => 'required|string',
+        $validated = $request->validate([
+            'nama'          => 'required|string|max:255',
+            'umur'          => 'required|integer|min:1',
+            'kelas_tingkat' => 'required|string',
+            'kelas_jurusan' => 'required|string',
+            'kelas_ke'      => 'required|integer',
+            'sobat_id'      => 'nullable|exists:stokobats,id',
+            'keluhan'       => 'required|string',
+            'tindakan'      => 'required|string',
+            'status'        => 'nullable|string|max:50',
         ]);
 
+        // Gabungkan kelas
+        $validated['kelas'] =
+            $request->kelas_tingkat . ' - ' .
+            $request->kelas_jurusan . ' - ' .
+            $request->kelas_ke;
+
+        $validated['user_id'] = auth()->id();
+
+        // Kurangi stok obat jika dipilih
         if ($request->sobat_id) {
             $stokobat = Stokobat::findOrFail($request->sobat_id);
             if ($stokobat->jumlah <= 0) {
@@ -88,16 +92,17 @@ class KunjunganController extends Controller
             $stokobat->decrement('jumlah');
         }
 
-        Kunjungan::create($request->all());
+        Kunjungan::create($validated);
 
         return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil ditambahkan' . ($request->sobat_id ? ' dan stok dikurangi' : ''));
     }
+        
 
     public function edit($id)
     {
         $kunjungan = Kunjungan::findOrFail($id);
         $users = User::all();
-        $siswas = Siswa::all();
+        
         $stokobats = Stokobat::select('obat_id')
         ->groupBy('obat_id')
         ->get()
@@ -119,46 +124,52 @@ class KunjunganController extends Controller
 
         return $stokDipilih;
     });
-        return view('kunjungans.edit', compact('kunjungan', 'users', 'stokobats', 'siswas'))->with('success', 'Data kunjungan berhasil disimpan.');
+        return view('kunjungans.edit', compact('kunjungan', 'users', 'stokobats'))->with('success', 'Data kunjungan berhasil disimpan.');
     }
 
-    public function update(Request $request, $id)
+   public function update(Request $request, $id)
     {
-        $request->validate([
-            'siswa_id' => 'required|exists:siswas,id',
-            'sobat_id' => 'nullable|exists:stokobats,id',
-            'kelas' => 'required|string',
-            'umur' => 'required|integer',
-            'keluhan' => 'required|string',
-            'tindakan' => 'required|string',
+        $validated = $request->validate([
+            'nama'          => 'required|string|max:255',
+            'umur'          => 'required|integer|min:1',
+            'kelas_tingkat' => 'required|string',
+            'kelas_jurusan' => 'required|string',
+            'kelas_ke'      => 'required|integer',
+            'sobat_id'      => 'nullable|exists:stokobats,id',
+            'keluhan'       => 'required|string',
+            'tindakan'      => 'required|string',
+            'status'        => 'nullable|string|max:50',
         ]);
 
-        $kunjungan = Kunjungan::findOrFail($id);
-        $sobatLamaId = $kunjungan->sobat_id;
-        $sobatBaruId = $request->sobat_id;
+        $validated['kelas'] =
+            $request->kelas_tingkat . ' - ' .
+            $request->kelas_jurusan . ' - ' .
+            $request->kelas_ke;
 
-        if ($sobatLamaId != $sobatBaruId) {
-            if ($sobatLamaId) {
-                $stokLama = Stokobat::find($sobatLamaId);
-                if ($stokLama) $stokLama->increment('jumlah');
+        $kunjungan = Kunjungan::findOrFail($id);
+
+        // Manajemen stok
+        if ($kunjungan->sobat_id != $request->sobat_id) {
+            if ($kunjungan->sobat_id) {
+                Stokobat::find($kunjungan->sobat_id)?->increment('jumlah');
             }
 
-            if ($sobatBaruId) {
-                $stokBaru = Stokobat::findOrFail($sobatBaruId);
+            if ($request->sobat_id) {
+                $stokBaru = Stokobat::findOrFail($request->sobat_id);
                 if ($stokBaru->jumlah <= 0) {
-                    return back()->with('error', 'Stok obat baru tidak mencukupi');
+                    return back()->with('error', 'Stok obat tidak mencukupi');
                 }
                 $stokBaru->decrement('jumlah');
             }
         }
 
-        $data = $request->only(['siswa_id', 'sobat_id', 'kelas', 'umur', 'keluhan', 'tindakan']);
-        $data['user_id'] = auth()->id();
-        $kunjungan->update($data);
+        $validated['user_id'] = auth()->id();
+        $kunjungan->update($validated);
 
-        return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil diperbarui');
+         return redirect()->route('kunjungans.index')->with('success', 'Kunjungan berhasil diperbarui');
     }
 
+       
     public function destroy($id)
     {
         $kunjungan = Kunjungan::findOrFail($id);
@@ -191,8 +202,17 @@ class KunjunganController extends Controller
 
     public function print()
     {
-        $kunjungans = Kunjungan::with(['user', 'stokobat.obat', 'siswa'])->get();
-        $pdf = Pdf::loadView('kunjungans.print', compact('kunjungans'));
-        return $pdf->download('kunjungan.pdf');
+        $rekapKunjungan = Kunjungan::select(
+                'nama',
+                DB::raw('COUNT(*) as total_kunjungan')
+            )
+            ->groupBy('nama')
+            ->orderBy('total_kunjungan', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('kunjungans.print', compact('rekapKunjungan'));
+
+        return $pdf->download('laporan_rekap_kunjungan.pdf');
     }
+
 }

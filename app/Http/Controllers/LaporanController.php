@@ -7,6 +7,7 @@ use App\Models\Stokobat;
 use App\Models\AlatMedis;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
@@ -20,37 +21,70 @@ class LaporanController extends Controller
     {
         $request->validate([
             'start_month' => 'required|date_format:Y-m',
-            'end_month' => 'required|date_format:Y-m|after_or_equal:start_month',
+            'end_month'   => 'required|date_format:Y-m|after_or_equal:start_month',
         ]);
 
         $start = $request->start_month . '-01';
-        $end = date('Y-m-t', strtotime($request->end_month . '-01'));
+        $end   = date('Y-m-t', strtotime($request->end_month . '-01'));
 
-        $kunjungans = Kunjungan::with(['siswa', 'user', 'stokobat.obat'])
-        ->whereBetween('created_at', [$start, $end])
-        ->get();
+        $kunjungans = Kunjungan::select(
+                'nama',
+                'kelas',
+                'umur',
+                DB::raw('COUNT(*) as total_kunjungan')
+            )
+            ->whereBetween('created_at', [$start, $end])
+            ->groupBy('nama', 'kelas', 'umur')
+            ->orderByDesc('total_kunjungan')
+            ->get();
 
 
         return view('laporan.index', compact('kunjungans'));
     }
+
+    //data lama
+    // public function filterKunjungan(Request $request)
+    // {
+    //     $request->validate([
+    //         'start_month' => 'required|date_format:Y-m',
+    //         'end_month' => 'required|date_format:Y-m|after_or_equal:start_month',
+    //     ]);
+
+    //     $start = $request->start_month . '-01';
+    //     $end = date('Y-m-t', strtotime($request->end_month . '-01'));
+
+    //     $kunjungans = Kunjungan::with(['user', 'stokobat.obat'])
+    //     ->whereBetween('created_at', [$start, $end])
+    //     ->get();
+
+
+    //     return view('laporan.index', compact('kunjungans'));
+    // }
 
     // Cetak PDF laporan kunjungan
     public function cetakKunjunganPdf(Request $request)
     {
         $request->validate([
             'start_month' => 'required|date_format:Y-m',
-            'end_month' => 'required|date_format:Y-m|after_or_equal:start_month',
+            'end_month'   => 'required|date_format:Y-m|after_or_equal:start_month',
         ]);
 
         $start = $request->start_month . '-01';
-        $end = date('Y-m-t', strtotime($request->end_month . '-01'));
+        $end   = date('Y-m-t', strtotime($request->end_month . '-01'));
 
-        $kunjungans = Kunjungan::with(['user', 'stokobat.obat', 'siswa'])
+        $kunjungans = Kunjungan::select(
+                'nama',
+                'kelas',
+                'umur',
+                DB::raw('COUNT(*) as total_kunjungan')
+            )
             ->whereBetween('created_at', [$start, $end])
+            ->groupBy('nama', 'kelas', 'umur')
+            ->orderByDesc('total_kunjungan')
             ->get();
 
-        $pdf = Pdf::loadView('kunjungans.print', compact('kunjungans'));
-        return $pdf->download('kunjungan.pdf');
+        $pdf = Pdf::loadView('kunjungans.print', compact('kunjungans', 'start', 'end'));
+        return $pdf->download('rekap_kunjungan.pdf');
     }
 
     // Filter laporan stok obat

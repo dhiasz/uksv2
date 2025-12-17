@@ -54,19 +54,21 @@ class AlatMedisController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
+        $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'kode' => 'required|string|max:255',
-            'kondisi' => 'required|string|max:255',
+            'kondisi' => 'required|in:Baik,Sedang,Rusak,Rusak Berat',
         ]);
 
         $alatmedis = AlatMedis::findOrFail($id);
-        $alatmedis->update($request->all());
+        $alatmedis->update($validated);
 
-        return redirect()->route('alatmedis.index')->with('success', 'Alat medis berhasil diperbarui.');
+        return redirect()
+            ->route('alatmedis.index')
+            ->with('success', 'Alat medis berhasil diperbarui.');
     }
 
     /**

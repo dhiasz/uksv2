@@ -44,43 +44,39 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2>Laporan Data Kunjungan</h2>
-        <p>Unit Kesehatan Sekolah</p>
-    </div>
+    <h2>Laporan Rekap Kunjungan UKS</h2>
+    <p style="text-align:center;">
+        Periode {{ \Carbon\Carbon::parse($start)->translatedFormat('F Y') }}
+        s/d
+        {{ \Carbon\Carbon::parse($end)->translatedFormat('F Y') }}
+    </p>
+
 
     <table>
-        <thead>
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama Siswa</th>
+            <th>Kelas</th>
+            <th>Umur</th>
+            <th>Jumlah Kunjungan ke UKS</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($kunjungans as $index => $kunjungan)
             <tr>
-                <th>No</th>
-                <th>Nama Siswa</th>
-                <th>Kelas</th>
-                <th>Umur</th>
-                <th>Keluhan</th>
-                <th>Tindakan</th>
-                <th>Obat</th>
-                <th>Petugas</th>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $kunjungan->nama }}</td>
+                <td>{{ $kunjungan->kelas }}</td>
+                <td style="text-align:center;">{{ $kunjungan->umur }}</td>
+                <td style="text-align:center; font-weight:bold;">
+                    {{ $kunjungan->total_kunjungan }} kali
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($kunjungans as $index => $kunjungan)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                     <td class="px-4 py-2 border">{{ $kunjungan->siswa->nama ?? '-' }}</td>
-                    <td class="px-4 py-2 border">{{ $kunjungan->kelas }}</td>
-                    <td class="px-4 py-2 border text-center">{{ $kunjungan->umur }}</td>
-                    <td class="px-4 py-2 border">{{ $kunjungan->keluhan }}</td>
-                    <td class="px-4 py-2 border">{{ $kunjungan->tindakan }}</td>
-                    <td class="px-4 py-2 border">
-                        {{ $kunjungan->stokobat->obat->nama_obat ?? '-' }}
-                    </td>
-                    <td class="px-4 py-2 border">
-                        {{ $kunjungan->user->username ?? '-' }}
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
+        @endforeach
+    </tbody>
     </table>
+
 
     <div class="footer">
         Dicetak pada: {{ \Carbon\Carbon::now()->format('d M Y H:i') }}
