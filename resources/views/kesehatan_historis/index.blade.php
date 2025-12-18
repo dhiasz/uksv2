@@ -64,6 +64,18 @@
                         <th class="px-4 py-2">Golongan Darah</th>
                         <td class="px-4 py-2">{{ $kesehatan->goldar ?? '-' }}</td>
                     </tr>
+                    <tr class="bg-gray-200 dark:bg-gray-600">
+                        <th class="px-4 py-2 w-1/3">BMI</th>
+                        <td class="px-4 py-2 font-semibold">
+                            {{ $bmi }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 py-2">Kategori</th>
+                        <td class="px-4 py-2 font-semibold">
+                            {{ $kategoriBmi }}
+                        </td>
+                    </tr>
                 </table>
             </div>
 

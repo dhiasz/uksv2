@@ -73,7 +73,7 @@
                     <tbody class="text-white">
                         @forelse($kesehatans as $kesehatan)
                             <tr class="{{ $loop->even ? 'bg-white' : 'bg-gray-50' }} border-b border-gray-700">
-                                <td class="px-6 py-3 text-black">{{ $kesehatan->siswa->nama }}</td>
+                                <td class="px-6 py-3 text-black">{{ $kesehatan->nama }}</td>
                                 <td class="px-6 py-3 text-black">{{ $kesehatan->umur }}</td>
                                 <td class="px-6 py-3 text-black">{{ $kesehatan->tb }}</td>
                                 <td class="px-6 py-3 text-black">{{ $kesehatan->bb }}</td>

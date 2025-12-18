@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('kesehatan', KesehatanController::class)->except(['show']);
     Route::get('kesehatan/{kesehatan_id}/historis', [KesehatanHistorisController::class, 'index'])->name('kesehatan_historis.index');
 
+
     //======================================================================================================
 
 

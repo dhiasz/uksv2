@@ -9,16 +9,35 @@ use Illuminate\Http\Request;
 class KesehatanHistorisController extends Controller
 {
     public function index($kesehatan_id)
-    {
-        // Pastikan data kesehatan yang dimaksud ada (optional)
-        $kesehatan = Kesehatan::findOrFail($kesehatan_id);
+{
+    $kesehatan = Kesehatan::findOrFail($kesehatan_id);
 
-        // Ambil histori terkait kesehatan_id itu, urutkan terbaru dulu, paginasi
-        $historis = KesehatanHistoris::where('kesehatan_id', $kesehatan_id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+    // Hitung BMI
+    $tbMeter = $kesehatan->tb / 100;
+    $bmi = $tbMeter > 0
+        ? round($kesehatan->bb / ($tbMeter * $tbMeter), 1)
+        : 0;
 
-        // Kirim data ke view, termasuk data utama kesehatan (bisa pakai buat info header)
-        return view('kesehatan_historis.index', compact('historis', 'kesehatan'));
+    if ($bmi < 18.5) {
+        $kategoriBmi = 'Kurus';
+    } elseif ($bmi < 25) {
+        $kategoriBmi = 'Normal';
+    } elseif ($bmi < 30) {
+        $kategoriBmi = 'Overweight';
+    } else {
+        $kategoriBmi = 'Obesitas';
     }
+
+    $historis = KesehatanHistoris::where('kesehatan_id', $kesehatan_id)
+        ->latest()
+        ->paginate(10);
+
+    return view('kesehatan_historis.index', compact(
+        'kesehatan',
+        'historis',
+        'bmi',
+        'kategoriBmi'
+    ));
+}
+
 }

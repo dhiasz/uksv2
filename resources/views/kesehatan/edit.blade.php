@@ -1,30 +1,29 @@
 <x-app-layout>
     <div class="max-w-4xl mx-auto mt-10 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">Edit Data Kesehatan</h1>
+            @if (session('info'))
+                <div class="mb-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded">
+                    {{ session('info') }}
+                </div>
+            @endif
         <form action="{{ route('kesehatan.update', $kesehatan->id) }}" method="POST">
             @csrf
             @method('PUT')
 
-            {{-- Pilih Siswa --}}
+
+            {{-- Nama --}}
             <div class="mb-4">
-                <label for="nama_siswa" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Siswa</label>
-                <input type="text" id="nama_siswa" name="nama_siswa" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('nama_siswa', $kesehatan->siswa->nama ?? '') }}" required autocomplete="off">
-                <input type="hidden" name="siswa_id" id="siswa_id" value="{{ old('siswa_id', $kesehatan->siswa_id) }}">
-                @error('siswa_id')
+                <label for="nama" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama</label>
+                <input type="text" name="nama" id="nama" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('nama', $kesehatan->nama) }}" placeholder="Masukan Nama siswa" required>
+                @error('nama')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
             </div>
-
-            {{-- NIS --}}
-            <div class="mb-4">
-                <label for="nis_display" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">NIS</label>
-                <input type="text" id="nis_display" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200 bg-gray-100" value="{{ $kesehatan->siswa->nis ?? '' }}" readonly>
-            </div>
-
-            {{-- Umur --}}
+            
+            {{-- Usia --}}
             <div class="mb-4">
                 <label for="umur" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Usia</label>
-                <input type="number" name="umur" id="umur" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200 bg-gray-100" value="{{ old('umur', $kesehatan->umur) }}" required readonly>
+                <input type="number" name="umur" id="umur" min="15" max="250" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200" value="{{ old('umur', $kesehatan->umur) }}" required>
                 @error('umur')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                 @enderror
@@ -89,50 +88,24 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function hitungUmur(tglLahir) {
-                if (!tglLahir) return '';
-                const today = new Date();
-                const lahir = new Date(tglLahir);
-                let umur = today.getFullYear() - lahir.getFullYear();
-                const m = today.getMonth() - lahir.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) umur--;
-                return umur;
-            }
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-            $("#nama_siswa").autocomplete({
-                source: "{{ route('siswa.autocomplete') }}",
-                minLength: 2,
-                select: function(event, ui) {
-                    $('#siswa_id').val(ui.item.id);
-                    $('#nama_siswa').val(ui.item.label);
-                    $('#nis_display').val(ui.item.nis);
-                    $('#umur').val(hitungUmur(ui.item.tgl));
-                }
-            });
+    document.getElementById('tensi').addEventListener('input', function () {
+        if (this.value.includes('-')) {
+            this.value = this.value.replace(/-/g, '');
+        }
+    });
 
-            $('#nama_siswa').on('change keyup', function() {
-                if ($(this).val() === '') {
-                    $('#siswa_id').val('');
-                    $('#nis_display').val('');
-                    $('#umur').val('');
-                }
-            });
+    document.getElementById('tb').addEventListener('input', function () {
+        if (this.value > 250) this.value = 250;
+    });
 
-            document.getElementById('tensi').addEventListener('input', function(e) {
-                if (this.value.includes('-')) {
-                    this.value = this.value.replace(/-/g, '');
-                }
-            });
+    document.getElementById('bb').addEventListener('input', function () {
+        if (this.value > 180) this.value = 180;
+    });
 
-            document.getElementById('tb').addEventListener('input', function () {
-                if (this.value > 250) this.value = 300;
-            });
+});
+</script>
 
-            document.getElementById('bb').addEventListener('input', function () {
-                if (this.value > 180) this.value = 180;
-            });
-        });
-    </script>
 </x-app-layout>

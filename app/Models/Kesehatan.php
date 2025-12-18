@@ -13,7 +13,7 @@ class Kesehatan extends Model
 
     protected $fillable = [
         'user_id',
-        'siswa_id',
+        'nama',
         'umur',
         'tb',
         'bb',
@@ -27,12 +27,6 @@ class Kesehatan extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke Siswa
-    public function siswa()
-    {
-        return $this->belongsTo(Siswa::class);
-    }
-
     // Relasi ke KesehatanHistoris
     public function historis()
     {
@@ -43,6 +37,7 @@ class Kesehatan extends Model
     public function simpanHistoriJikaBerubah(array $data)
     {
         if (
+            $this->nama != $data['nama'] ||
             $this->umur != $data['umur'] ||
             $this->tb != $data['tb'] ||
             $this->bb != $data['bb'] ||
@@ -51,6 +46,7 @@ class Kesehatan extends Model
         ) {
             KesehatanHistoris::create([
                 'kesehatan_id' => $this->id,
+                'nama' => $this->nama,
                 'umur' => $this->umur,
                 'tb' => $this->tb,
                 'bb' => $this->bb,
